@@ -1,0 +1,23 @@
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Data (original and processed datasets must NOT be committed)
+data/raw/
+data/processed/
+
+# Jupyter Notebook checkpoints
+notebooks/.ipynb_checkpoints/
+.ipynb_checkpoints/
+
+# OS specific files
+.DS_Store
+Thumbs.db

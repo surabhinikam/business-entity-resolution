@@ -1,0 +1,738 @@
+{
+  "sources": {
+    "train_source1": {
+      "file_name": "train_source1.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\train\\train_source1.tsv",
+      "file_size_bytes": 210069713,
+      "file_size_mb": 200.34,
+      "total_rows": 2206821,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {},
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 0.0,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "US": 1323633,
+        "India": 883188
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 100.0
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 100.0
+        }
+      },
+      "character_script_examples": {
+        "Latin": {
+          "business_name": "Orelee's Barbershop",
+          "business_address": "1795 Westchester Drive, High Point, NC"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S1-925783039",
+          "business_name": "Orelee's Barbershop",
+          "business_address": "1795 Westchester Drive, High Point, NC",
+          "country": "US"
+        },
+        {
+          "entity_id": "S1-773889195",
+          "business_name": "Prime Money",
+          "business_address": "17560 Ellis Road, Tahlequah, OK",
+          "country": "US"
+        },
+        {
+          "entity_id": "S1-309349399",
+          "business_name": "Callicoat & Dailey Inc",
+          "business_address": "Charlotte, NC, 833 Reliance Street",
+          "country": "US"
+        }
+      ]
+    },
+    "train_source2": {
+      "file_name": "train_source2.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\train\\train_source2.tsv",
+      "file_size_bytes": 489301488,
+      "file_size_mb": 466.63,
+      "total_rows": 5034616,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {
+        "business_address": 168967
+      },
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 3.356,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "India": 2017799,
+        "US": 3016817
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 90.91,
+          "Devanagari": 5.37,
+          "Telugu": 0.78,
+          "Kannada": 0.74,
+          "Tamil": 0.68,
+          "Gujarati": 0.62,
+          "Bengali": 0.61,
+          "Malayalam": 0.38,
+          "Oriya": 0.15,
+          "Gurmukhi": 0.13
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 96.61,
+          "Devanagari": 5.51,
+          "[No Letters/Empty]": 3.39,
+          "Kannada": 0.76,
+          "Tamil": 0.69,
+          "Telugu": 0.67,
+          "Bengali": 0.64,
+          "Gujarati": 0.63,
+          "Malayalam": 0.31,
+          "Gurmukhi": 0.14
+        }
+      },
+      "character_script_examples": {
+        "Devanagari": {
+          "business_name": "राम मार्केटिंग प्राइवेट लिमिटेड",
+          "business_address": "PLOT NO B-78/1, ADDITIONAL MIDC ANAND NAGAR, AMBERNATH EAST, THANE, महाराष्ट्र"
+        },
+        "Latin": {
+          "business_name": "-- Holloway Peak Inc Seafood",
+          "business_address": "KH NO. -570/13, NEW DELHI, WEST DELHI, Delhi"
+        },
+        "Tamil": {
+          "business_name": "குளோபல் பிசினஸ் பிரைவேட் லிமிடெட்",
+          "business_address": "#44, KILATHOPE STREET, MADURAI MADURAI, MADURAI, தமிழ்நாடு"
+        },
+        "Gujarati": {
+          "business_name": "શક્તિ અર્બન પ્રોડક્ટ્સ પ્રાઇવેટ લિમિટેડ",
+          "business_address": "PLOT 008, CHAITANYA IND AREA, GANGA FORGING GATE, KOTDA SANGHANI, ગુજરાત"
+        },
+        "Bengali": {
+          "business_name": "গোল্ড প্রডিউসার স্টোর্স লিমিটেড",
+          "business_address": "NO. 28 PSIXL-3RD FLOOR, NEWTOWN ROAD, UNIT NO. 305, PO RAJARHAT GOPALPUR, KOLKATA, KOLKATA, পশ্চিমবঙ্গ"
+        },
+        "Kannada": {
+          "business_name": "ಮಾಡರ್ನ್ ಕನ್ಸಲ್ಟೆಂಟ್ಸ್ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್",
+          "business_address": "NO ##14 , SHREE SHIDRAM NILAYA, OPP KEC GANDHINAGAR, SANMARGA NAGAR, HUBLI, DHARWAD, ಕರ್ನಾಟಕ"
+        },
+        "Telugu": {
+          "business_name": "పర్‌ఫెక్ట్ యునైటెడ్ మీడియా ప్రైవేట్ లిమిటెడ్",
+          "business_address": "ఆంధ్రప్రదేశ్, DOOR NO.11/1/471, KRUPANANDA NAGAR, ANANTAPUR"
+        },
+        "Malayalam": {
+          "business_name": "ശക്തി ഇംപെക്സ് പ്രൈവറ്റ് ലിമിറ്റഡ്",
+          "business_address": "9-557-4, VETTICKAL HOUSE, PALAKKAD, കേരളം"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S2-166376419",
+          "business_name": "राम मार्केटिंग प्राइवेट लिमिटेड",
+          "business_address": "KH NO. -570/13, NEW DELHI, WEST DELHI, Delhi",
+          "country": "India"
+        },
+        {
+          "entity_id": "S2-764573417",
+          "business_name": "-- Holloway Peak Inc Seafood",
+          "business_address": "105 ELM ST, MORGANTON, NC",
+          "country": "US"
+        },
+        {
+          "entity_id": "S2-639257739",
+          "business_name": "आदित्य प्रॉपर्टीज एलएलपी",
+          "business_address": "G-3/571, GULMOHAR COLONY, BHOPAL, Madhya Pradesh",
+          "country": "India"
+        },
+        {
+          "entity_id": "S2-187379771",
+          "business_name": "Guerra And Krueger Table, LLC",
+          "business_address": "",
+          "country": "US"
+        }
+      ]
+    },
+    "train_source3": {
+      "file_name": "train_source3.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\train\\train_source3.tsv",
+      "file_size_bytes": 503705637,
+      "file_size_mb": 480.37,
+      "total_rows": 5285603,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {
+        "business_address": 175916
+      },
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 3.328,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "US": 3170056,
+        "India": 2115547
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 95.37,
+          "Devanagari": 2.99,
+          "Telugu": 0.43,
+          "Kannada": 0.42,
+          "Tamil": 0.37,
+          "Bengali": 0.35,
+          "Gujarati": 0.34,
+          "Malayalam": 0.22,
+          "Gurmukhi": 0.08,
+          "Oriya": 0.08
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 96.69,
+          "Devanagari": 5.23,
+          "[No Letters/Empty]": 3.31,
+          "Kannada": 0.75,
+          "Tamil": 0.66,
+          "Telugu": 0.64,
+          "Bengali": 0.6,
+          "Gujarati": 0.58,
+          "Malayalam": 0.3,
+          "Gurmukhi": 0.14
+        }
+      },
+      "character_script_examples": {
+        "Latin": {
+          "business_name": "wilfordhancock.com",
+          "business_address": "Mack Rd, Haltom City, Texas"
+        },
+        "Kannada": {
+          "business_name": "ಬ್ಲ್ಯಾಕ್ ಇಂಜಿನಿಯರಿಂಗ್ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್",
+          "business_address": "Door No 183, 41St Cross, 22Nd Main 9Th Block Jayanagar, Bengaluru Urban, Bangalore, ಕರ್ನಾಟಕ"
+        },
+        "Tamil": {
+          "business_name": "அரிஹந்த் Foundation Private Limited",
+          "business_address": "Basement Shop No. B-14/2, Chennai, தமிழ்நாடு"
+        },
+        "Devanagari": {
+          "business_name": "ब्लू टेक्नोलॉजीज",
+          "business_address": "Plot No.: 3829/3250, Near Metro Pillar No: 234, Kanhaiya Nagar, Tri Nagar, Delhi, New Delhi, दिल्ली"
+        },
+        "Malayalam": {
+          "business_name": "സിൽവർ കൺസൾട്ടൻസി പ്രൈവറ്റ് ലിമിറ്റഡ്",
+          "business_address": "6/170, Saravana Poyka, Madathuvilakam Perukavu P.o., Malayinkeezhu, Thiruvananthapuram, Thiruvananthapuram, Trivandrum, കേരളം"
+        },
+        "Telugu": {
+          "business_name": "గుజరాత్ Logistics లిమిటెడ్",
+          "business_address": "Hyderabad, No 12-5-35/C/47- Ambedkar Nagar, తెలంగాణ, Secunderabad"
+        },
+        "Gujarati": {
+          "business_name": "આલ્ફા ફાઉન્ડેશન પ્રાઇવેટ લિમિટેડ",
+          "business_address": "Core House Off C G Roadnr Parimal Garden Ellisbridge, Ahmedbad, Ahmedabad, ગુજરાત"
+        },
+        "Bengali": {
+          "business_name": "রেড টেক প্রাইভেট লিমিটেড",
+          "business_address": "867 Ground-floor G-1, Domjur, 296/1 G.t.road Belur, Bally, পশ্চিমবঙ্গ"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S3-202863386",
+          "business_name": "wilfordhancock.com",
+          "business_address": "Mack Rd, Haltom City, Texas",
+          "country": "US"
+        },
+        {
+          "entity_id": "S3-859268022",
+          "business_name": "International South Consultants Private Ltd",
+          "business_address": "",
+          "country": "India"
+        },
+        {
+          "entity_id": "S3-45067784",
+          "business_name": "அரிஹந்த் Foundation Private Limited",
+          "business_address": "Saranampatti Roadvellakinar Post Coimbatore, Tamilnadu, Coimbatore, TN",
+          "country": "India"
+        },
+        {
+          "entity_id": "S3-32805948",
+          "business_name": "സിൽവർ കൺസൾട്ടൻസി പ്രൈവറ്റ് ലിമിറ്റഡ്",
+          "business_address": "Ernakulam, KL, 18/479E/3 Peringattil Tower Kangarappady Kakkanad, Ernakulam",
+          "country": "India"
+        }
+      ]
+    },
+    "test_source1": {
+      "file_name": "test_source1.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\test\\test_source1.tsv",
+      "file_size_bytes": 175022086,
+      "file_size_mb": 166.91,
+      "total_rows": 1732544,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {},
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 0.0,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "US": 663106,
+        "France": 259452,
+        "India": 809986
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 100.0
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 100.0
+        }
+      },
+      "character_script_examples": {
+        "Latin": {
+          "business_name": "Zephay Labs Inc",
+          "business_address": "2621 Cotten Road, Tyler, TX"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S1-714132312",
+          "business_name": "Zephay Labs Inc",
+          "business_address": "2621 Cotten Road, Tyler, TX",
+          "country": "US"
+        },
+        {
+          "entity_id": "S1-106407869",
+          "business_name": "Vision Partners Corp",
+          "business_address": "IA, Iowa City, 1064 Newton Rd, Unit 11",
+          "country": "US"
+        },
+        {
+          "entity_id": "S1-913506265",
+          "business_name": "Thermal & Fils SASU",
+          "business_address": "20 Rue Parmentier, Dunkerque, Hauts-de-France",
+          "country": "France"
+        }
+      ]
+    },
+    "test_source2": {
+      "file_name": "test_source2.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\test\\test_source2.tsv",
+      "file_size_bytes": 509456422,
+      "file_size_mb": 485.86,
+      "total_rows": 4887273,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {
+        "business_address": 129408
+      },
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 2.648,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "India": 2312565,
+        "France": 703378,
+        "US": 1871330
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 89.26,
+          "Devanagari": 6.29,
+          "Telugu": 0.92,
+          "Kannada": 0.9,
+          "Tamil": 0.8,
+          "Gujarati": 0.74,
+          "Bengali": 0.72,
+          "Malayalam": 0.45,
+          "Oriya": 0.17,
+          "Gurmukhi": 0.16
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 97.35,
+          "Devanagari": 6.5,
+          "[No Letters/Empty]": 2.65,
+          "Kannada": 0.92,
+          "Tamil": 0.84,
+          "Telugu": 0.8,
+          "Bengali": 0.78,
+          "Gujarati": 0.75,
+          "Malayalam": 0.37,
+          "Gurmukhi": 0.16
+        }
+      },
+      "character_script_examples": {
+        "Latin": {
+          "business_name": "Brahma Infosoft",
+          "business_address": "COIMATORE COLONY, HUNSUR TQMYSORE DIST., Karnataka"
+        },
+        "Gujarati": {
+          "business_name": "ૐ Foundation પ્રાઇવેટ લિમિટેડ",
+          "business_address": "CRYSTAL PLAZA, TOWER NO.1, 2ND FLOOR, 2-B GOTRI MAIN ROAD, VADODARA, ગુજરાત"
+        },
+        "Devanagari": {
+          "business_name": "आनंद फाउंडेशन प्राइवेट लिमिटेड",
+          "business_address": "H.NO 4/A ASHTAVINAYAK, NAGAR, NAGPUR (URBAN), NAGPUR, महाराष्ट्र"
+        },
+        "Telugu": {
+          "business_name": "కృష్ణా ఇంపెక్స్ లిమిటెడ్",
+          "business_address": "0098 GALAXY, FLOORS 22-24, PLOT NO. 1 SURVEY NO 83/1, SERI LINGAMPALLY, తెలంగాణ"
+        },
+        "Bengali": {
+          "business_name": "ইনোভেটিভ প্রোডাক্টস রেস্টুরেন্ট লিমিটেড",
+          "business_address": "NO D/38 SONAMUKHI ROAD DASPARA, ASHUTI, LP-211/32 UG, THAKURPUKUR MAHESTOLA, পশ্চিমবঙ্গ"
+        },
+        "Tamil": {
+          "business_name": "யுனைடெட் சிஸ்டம்ஸ் கன்ஸ்ட்ரக்ஷன்ஸ் பிரைவேட் லிமிடெட்",
+          "business_address": "G-134, VALLUVAR KOTTAM HIGH ROAD, NUNGAMBAKKAM, CHENNAI, தமிழ்நாடு"
+        },
+        "Malayalam": {
+          "business_name": "അൽ കൺസ്ട്രക്ഷൻസ് ഫുഡ്സ് പ്രൈവറ്റ് ലിമിറ്റഡ്",
+          "business_address": "XVIII/C-37, FIRST FLOOR, U BROTHERS BUILDING, GURUVAYOOR ROAD, KUNNAMKULAM POST, THRISSUR, കേരളം"
+        },
+        "Kannada": {
+          "business_name": "ಗುರು ಎಸ್ಟೇಟ್ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್",
+          "business_address": "3980/3988 HOSAKEREHALLI MAIN RD, BSK 2 STG BANGALORE, BANGALORE SOUTH, ಕರ್ನಾಟಕ"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S2-192345572",
+          "business_name": "Brahma Infosoft",
+          "business_address": "COIMATORE COLONY, HUNSUR TQMYSORE DIST., Karnataka",
+          "country": "India"
+        },
+        {
+          "entity_id": "S2-566025912",
+          "business_name": "Marina Ecole France Sarl",
+          "business_address": "63 R. DE DIEPPE, LILLE, Hauts-de-France",
+          "country": "France"
+        },
+        {
+          "entity_id": "S2-956479781",
+          "business_name": "కృష్ణా ఇంపెక్స్ లిమిటెడ్",
+          "business_address": "H.NO 27TH FLOOR, Telangana, HYDERABAD, SERI LINGAMPALLY, G SQUARE, NEAR WELLS FARGO, RAIDURGAM",
+          "country": "India"
+        },
+        {
+          "entity_id": "S2-875724478",
+          "business_name": "ૐ Foundation પ્રાઇવેટ લિમિટેડ",
+          "business_address": "#203, NARAYAN KRUPA SQUARE, B/H NATRAJ CINEMA, NR. SAKAR V, ASHRAM R, OAD, MEMNAGAR, Gujarat",
+          "country": "India"
+        },
+        {
+          "entity_id": "S2-919241341",
+          "business_name": "Labh Krishak",
+          "business_address": "",
+          "country": "India"
+        }
+      ]
+    },
+    "test_source3": {
+      "file_name": "test_source3.tsv",
+      "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\test\\test_source3.tsv",
+      "file_size_bytes": 506002772,
+      "file_size_mb": 482.56,
+      "total_rows": 5082316,
+      "delimiter": "\\t (tab)",
+      "encoding": "UTF-8",
+      "columns": [
+        "entity_id",
+        "business_name",
+        "business_address",
+        "country"
+      ],
+      "data_types": {
+        "entity_id": "string",
+        "business_name": "string",
+        "business_address": "string",
+        "country": "string"
+      },
+      "missing_counts": {
+        "business_address": 136098
+      },
+      "missing_percentages": {
+        "entity_id": 0.0,
+        "business_name": 0.0,
+        "business_address": 2.678,
+        "country": 0.0
+      },
+      "target_fields_present": {
+        "business_name": true,
+        "business_address": true,
+        "country": true
+      },
+      "country_distribution": {
+        "India": 2405000,
+        "France": 731615,
+        "US": 1945701
+      },
+      "script_distribution_sampled": {
+        "business_name_top_scripts_pct": {
+          "Latin": 94.52,
+          "Devanagari": 3.51,
+          "Telugu": 0.53,
+          "Kannada": 0.51,
+          "Tamil": 0.45,
+          "Bengali": 0.41,
+          "Gujarati": 0.4,
+          "Malayalam": 0.26,
+          "Oriya": 0.1,
+          "Gurmukhi": 0.09
+        },
+        "business_address_top_scripts_pct": {
+          "Latin": 97.32,
+          "Devanagari": 6.26,
+          "[No Letters/Empty]": 2.68,
+          "Kannada": 0.88,
+          "Tamil": 0.77,
+          "Telugu": 0.77,
+          "Gujarati": 0.73,
+          "Bengali": 0.71,
+          "Malayalam": 0.36,
+          "Gurmukhi": 0.16
+        }
+      },
+      "character_script_examples": {
+        "Devanagari": {
+          "business_name": "मॉडर्न फाइनेंस",
+          "business_address": "H.no 910 A 3503, Mumbai, महाराष्ट्र"
+        },
+        "Latin": {
+          "business_name": "Shri Sai Infratech Co",
+          "business_address": "No 10 Enkay Square, 448A, Udyog Vihar Phase V, Gurugram, Gurgaon, HR"
+        },
+        "Tamil": {
+          "business_name": "ஈஸ்டர்ன் கன்சல்டன்சி பிரைவேட் லிமிடெட்",
+          "business_address": "No 25 Wvn Manor, Chennai, தமிழ்நாடு"
+        },
+        "Kannada": {
+          "business_name": "ಡಿಜಿಟಲ್ ಬಿಲ್ಡರ್ಸ್ ಪ್ರೈವೇಟ್ ಲಿಮಿಟೆಡ್",
+          "business_address": "#803 20/1, Bangalore South, Begur, ಕರ್ನಾಟಕ"
+        },
+        "Bengali": {
+          "business_name": "ইনোভেটিভ এনার্জি",
+          "business_address": "Kolkata, F-06, 28 No. Road Garden Reach, Kolkata, Howrah, পশ্চিমবঙ্গ"
+        },
+        "Gujarati": {
+          "business_name": "Tech Food પ્રાઇવેટ લિમિટેડ",
+          "business_address": "No 2-P, Mahavir Nagar, Plot No. 10/A, Gandhidham, Kachchh, ગુજરાત"
+        },
+        "Telugu": {
+          "business_name": "గుడ్ ఎనర్జీ ప్రైవేట్ లిమిటెడ్",
+          "business_address": "P.no.46, Sy.no.133, Fno 502, Samanthapuri Colony, Sai Ram Avenue, Above Indian Bank, Near Na, Gole, Mohan Nagar, Hyderabad, తెలంగాణ"
+        },
+        "Malayalam": {
+          "business_name": "സായ് മാനേജ്മെന്റ് എൻജിനീയറിംഗ്",
+          "business_address": "Room No.18/93a Muvattupuzha P O, Muvattupuzha, Ernakulam, കേരളം"
+        }
+      },
+      "representative_samples": [
+        {
+          "entity_id": "S3-462677478",
+          "business_name": "मॉडर्न फाइनेंस",
+          "business_address": "No 10 Enkay Square, 448A, Udyog Vihar Phase V, Gurugram, Gurgaon, HR",
+          "country": "India"
+        },
+        {
+          "entity_id": "S3-374810425",
+          "business_name": "Shri Sai Infratech Co",
+          "business_address": "3/115, East Delhi, DL",
+          "country": "India"
+        },
+        {
+          "entity_id": "S3-184785497",
+          "business_name": "ஈஸ்டர்ன் கன்சல்டன்சி பிரைவேட் லிமிடெட்",
+          "business_address": "1410 Sri Mahalakshmi Mandiar 59, Justice Rathinavel Pandian Road, Chennai, TN",
+          "country": "India"
+        },
+        {
+          "entity_id": "S3-643284918",
+          "business_name": "Swing Maison  SARL",
+          "business_address": "",
+          "country": "France"
+        },
+        {
+          "entity_id": "S3-198586129",
+          "business_name": "Fractales Amis Groupe S.A.S",
+          "business_address": "23 Rue Icmre, La Teste-de-buch, Gironde",
+          "country": "France"
+        }
+      ]
+    }
+  },
+  "ground_truth": {
+    "file_name": "train_ground_truth.tsv",
+    "file_path": "C:\\Users\\surab\\OneDrive\\Documents\\HACKATHONS\\Amazon ML\\student_resource\\dataset\\train\\train_ground_truth.tsv",
+    "file_size_bytes": 127015583,
+    "file_size_mb": 121.13,
+    "total_rows": 2206821,
+    "columns": [
+      "source1_entity_id",
+      "matched_entity_ids"
+    ],
+    "missing_counts": {
+      "matched_entity_ids": 123247
+    },
+    "missing_percentages": {
+      "source1_entity_id": 0.0,
+      "matched_entity_ids": 5.585
+    },
+    "linkage_analysis": {
+      "total_source1_entities": 2206821,
+      "unique_source1_entities": 2206821,
+      "unmatched_source1_entities": 123247,
+      "unmatched_source1_pct": 5.585,
+      "total_linked_pairs": 7638365,
+      "total_s2_matches": 3693619,
+      "total_s3_matches": 3944746,
+      "avg_matches_per_source1": 3.46,
+      "avg_matches_for_matched_source1": 3.67,
+      "unique_s2_entities_matched": 3693619,
+      "unique_s3_entities_matched": 3944746,
+      "top_match_cardinalities": {
+        "3": 530841,
+        "4": 484115,
+        "2": 375212,
+        "5": 321957,
+        "6": 164868,
+        "0": 123247
+      },
+      "linking_mechanism": "Each record maps a single query business entity from source1 (S1-*) to zero, one, or multiple candidate entities in source2 (S2-*) and source3 (S3-*). Multiple matches are represented as comma-separated identifiers."
+    },
+    "sample_records": [
+      {
+        "source1_entity_id": "S1-965667",
+        "matched_count": 5,
+        "s2_matches": 2,
+        "s3_matches": 3,
+        "matched_entity_ids": "S2-681193310,S2-743505751,S3-775321672,S3-11291185,S3-860443364"
+      },
+      {
+        "source1_entity_id": "S1-55344266",
+        "matched_count": 4,
+        "s2_matches": 2,
+        "s3_matches": 2,
+        "matched_entity_ids": "S2-249013014,S2-197070651,S3-478195123,S3-384364074"
+      },
+      {
+        "source1_entity_id": "S1-343815751",
+        "matched_count": 3,
+        "s2_matches": 2,
+        "s3_matches": 1,
+        "matched_entity_ids": "S2-790675320,S2-479876582,S3-878454467"
+      },
+      {
+        "source1_entity_id": "S1-656753428",
+        "matched_count": 3,
+        "s2_matches": 2,
+        "s3_matches": 1,
+        "matched_entity_ids": "S2-153058913,S2-24659151,S3-679606215"
+      },
+      {
+        "source1_entity_id": "S1-102811957",
+        "matched_count": 6,
+        "s2_matches": 3,
+        "s3_matches": 3,
+        "matched_entity_ids": "S2-478959098,S2-553508714,S2-625774905,S3-728090388,S3-928796641,S3-449308785"
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+# Core Data Processing (supports chunked/streaming reads)
+pandas
+numpy
+polars
+pyarrow
+
+# Text Processing & Normalization (Offline)
+regex
+unicodedata2
+
+# Machine Learning & Evaluation
+scikit-learn
+scipy
+
+# Utilities & Configuration
+pyyaml
+tqdm
+
+# Testing & Quality Assurance
+pytest
