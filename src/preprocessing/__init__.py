@@ -23,6 +23,10 @@ from src.preprocessing.ingestion import (
     read_train_ground_truth,
 )
 
+from src.preprocessing.pipeline import PreprocessingPipeline
+from src.preprocessing.writer import ParquetPartWriter, OUTPUT_SCHEMA
+from src.preprocessing.checkpoint import CheckpointManager
+
 __all__ = [
     "CanonicalRecord",
     "GroundTruthRecord",
@@ -42,4 +46,8 @@ __all__ = [
     "read_test_source2",
     "read_test_source3",
     "read_train_ground_truth",
+    "PreprocessingPipeline",
+    "ParquetPartWriter",
+    "OUTPUT_SCHEMA",
+    "CheckpointManager",
 ]
