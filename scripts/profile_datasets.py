@@ -7,7 +7,13 @@ from collections import Counter, defaultdict
 # Ensure UTF-8 output
 sys.stdout.reconfigure(encoding='utf-8')
 
-DATASET_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'student_resource', 'dataset'))
+REPOSITORY_DATASET_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'raw')
+)
+LEGACY_DATASET_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'student_resource', 'dataset')
+)
+DATASET_DIR = REPOSITORY_DATASET_DIR if os.path.isdir(REPOSITORY_DATASET_DIR) else LEGACY_DATASET_DIR
 
 SOURCE_FILES = {
     "train_source1": os.path.join(DATASET_DIR, "train", "train_source1.tsv"),

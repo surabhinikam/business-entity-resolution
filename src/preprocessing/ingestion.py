@@ -18,9 +18,17 @@ from src.validation.validators import (
     validate_canonical_record,
 )
 
-# Relative default path: ../student_resource/dataset
-DEFAULT_DATASET_DIR = os.path.abspath(
+# Support both the repository layout and the legacy challenge layout.
+_REPOSITORY_DATASET_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw")
+)
+_LEGACY_DATASET_DIR = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "..", "..", "student_resource", "dataset")
+)
+DEFAULT_DATASET_DIR = (
+    _REPOSITORY_DATASET_DIR
+    if os.path.isdir(_REPOSITORY_DATASET_DIR)
+    else _LEGACY_DATASET_DIR
 )
 
 

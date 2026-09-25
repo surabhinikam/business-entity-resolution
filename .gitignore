@@ -3,6 +3,7 @@
 env/
 venv/
 ENV/
+.idea/
 
 # Python bytecode & cache
 __pycache__/
