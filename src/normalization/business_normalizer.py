@@ -14,65 +14,12 @@ import re
 from typing import List, Optional
 
 from src.normalization.text_normalizer import normalize_text
-
-
-# Ordered list of suffix replacement patterns (longest / most specific first)
-# Each pattern matches at the end of the normalized business name.
-# Target canonical suffixes:
-# - 'pvt ltd'
-# - 'ltd'
-# - 'llc'
-# - 'inc'
-# - 'corp'
-# - 'llp'
-# - 'plc'
-# - 'co'
-_LEGAL_SUFFIX_RULES = [
-    # Private Limited variants (English, abbreviated, and transliterated Indic forms)
-    # e.g., 'private limited', 'pvt ltd', 'pvt. ltd.', 'praiveta limiteda', 'pra li'
-    (
-        re.compile(
-            r"\b(?:private\s+limited|pvt\s+ltd|pvt\s+limited|private\s+ltd|pvt|praiveta\s+limiteda|pra\s+li)\b\.?$",
-            re.IGNORECASE,
-        ),
-        "pvt ltd",
-    ),
-    # Public limited / plc
-    (
-        re.compile(r"\b(?:public\s+limited|plc)\b\.?$", re.IGNORECASE),
-        "plc",
-    ),
-    # Limited
-    (
-        re.compile(r"\b(?:limited|ltd|limiteda)\b\.?$", re.IGNORECASE),
-        "ltd",
-    ),
-    # LLC
-    (
-        re.compile(r"\b(?:limited\s+liability\s+company|llc)\b\.?$", re.IGNORECASE),
-        "llc",
-    ),
-    # LLP / transliterated 'elaelapi'
-    (
-        re.compile(r"\b(?:limited\s+liability\s+partnership|llp|elaelapi)\b\.?$", re.IGNORECASE),
-        "llp",
-    ),
-    # Inc / Incorporated
-    (
-        re.compile(r"\b(?:incorporated|inc)\b\.?$", re.IGNORECASE),
-        "inc",
-    ),
-    # Corporation / Corp
-    (
-        re.compile(r"\b(?:corporation|corp)\b\.?$", re.IGNORECASE),
-        "corp",
-    ),
-    # Company / Co (avoid replacing if part of a word or alone)
-    (
-        re.compile(r"\b(?:company|co)\b\.?$", re.IGNORECASE),
-        "co",
-    ),
-]
+from src.normalization.business_vocabulary import (
+    apply_legal_suffix,
+    normalize_business_vocabulary,
+    LEGAL_SUFFIX_RULES,
+    BUSINESS_TERMS,
+)
 
 
 def canonicalize_legal_suffix(name: str) -> str:
@@ -80,17 +27,7 @@ def canonicalize_legal_suffix(name: str) -> str:
     Standardize the legal/corporate suffix at the end of a business name string.
     Expects name to already be lowercased and stripped of diacritics.
     """
-    # Remove trailing commas, periods, or extra spaces before suffix check
-    trimmed = re.sub(r"[,.\s]+$", "", name).strip()
-
-    for pattern, canonical in _LEGAL_SUFFIX_RULES:
-        # Check if matched at the end of string
-        sub_name, count = pattern.subn(canonical, trimmed)
-        if count > 0:
-            # Re-clean multiple spaces
-            return re.sub(r"\s+", " ", sub_name).strip()
-
-    return trimmed
+    return apply_legal_suffix(name)
 
 
 def normalize_business_name(
@@ -101,12 +38,13 @@ def normalize_business_name(
     Normalize business name using either the transliterated form (preferred if provided)
     or the original text.
 
-    Steps:
+    Pipeline:
     1. Select transliterated if available, else original.
-    2. Lowercase, strip diacritics, NFC normalize, convert punctuation to spaces
+    2. Text normalization: Lowercase, strip diacritics, NFC normalize, convert punctuation to spaces
        (preserving '&', '-', and '/').
-    3. Standardize legal suffixes to canonical forms.
-    4. Collapse spaces and trim.
+    3. Business vocabulary normalization: Map high-confidence transliterated business tokens.
+    4. Legal suffix normalization: Standardize end-of-name corporate suffixes to canonical forms.
+    5. Collapse spaces and trim.
     """
     input_text = transliterated if transliterated is not None else name
     if input_text is None:
@@ -116,13 +54,16 @@ def normalize_business_name(
     if not cleaned:
         return ""
 
-    # First text normalization: strip diacritics, lowercase, remove punctuation except safe symbols
+    # 1. Text normalization
     norm = normalize_text(cleaned, strip_punctuation=True, preserve_safe_symbols=True)
     if not norm:
         return ""
 
-    # Canonicalize legal suffix
-    canonical = canonicalize_legal_suffix(norm)
+    # 2. Business vocabulary normalization (exact token matching)
+    vocab_norm = normalize_business_vocabulary(norm)
+
+    # 3. Legal suffix canonicalization (boundary-aware, end of name only)
+    canonical = apply_legal_suffix(vocab_norm)
 
     return canonical
 
