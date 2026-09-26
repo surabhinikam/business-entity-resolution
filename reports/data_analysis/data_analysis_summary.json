@@ -1,0 +1,1226 @@
+{
+  "raw": {
+    "source1": {
+      "source": "source1",
+      "file_path": "data/raw/train/train_source1.tsv",
+      "total_records": 2206821,
+      "unique_entity_ids": 2206821,
+      "duplicate_entity_ids": 0,
+      "schema": {
+        "entity_id": "String",
+        "business_name": "String",
+        "business_address": "String",
+        "country": "String"
+      },
+      "missing_columns": [],
+      "unexpected_columns": [],
+      "missing_values": {
+        "entity_id": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_name": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_address": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "country": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        }
+      },
+      "country_distribution": [
+        {
+          "country": "US",
+          "count": 1323633,
+          "pct": 59.979
+        },
+        {
+          "country": "India",
+          "count": 883188,
+          "pct": 40.021
+        }
+      ],
+      "business_name_stats": {
+        "valid_count": 2206821,
+        "unique_count": 1539229,
+        "duplicate_count": 667592,
+        "char_length": {
+          "min": 3,
+          "max": 105,
+          "mean": 24.03440333402664,
+          "median": 24.0,
+          "p90": 34.0,
+          "p99": 42.0
+        },
+        "token_count": {
+          "min": 1,
+          "max": 16,
+          "mean": 3.5476130596908404,
+          "median": 4.0
+        },
+        "non_ascii_count": 0,
+        "non_ascii_pct": 0.0,
+        "top_repeated": [
+          {
+            "name": "Primary Care Group",
+            "count": 253
+          },
+          {
+            "name": "Ear Nose & Throat Group",
+            "count": 251
+          },
+          {
+            "name": "Pediatric Group",
+            "count": 222
+          },
+          {
+            "name": "Womens Health Group",
+            "count": 220
+          },
+          {
+            "name": "Physical Therapy Group",
+            "count": 218
+          },
+          {
+            "name": "Pediatric Dental Group",
+            "count": 216
+          },
+          {
+            "name": "Behavioral Health Group",
+            "count": 215
+          },
+          {
+            "name": "Chiropractic Group",
+            "count": 209
+          },
+          {
+            "name": "Orthopedic Group",
+            "count": 208
+          },
+          {
+            "name": "Eye Group",
+            "count": 207
+          }
+        ]
+      },
+      "business_address_stats": {
+        "valid_count": 2206821,
+        "unique_count": 2130606,
+        "duplicate_count": 76215,
+        "char_length": {
+          "min": 11,
+          "max": 256,
+          "mean": 52.06621289175697,
+          "median": 41.0,
+          "p90": 90.0,
+          "p99": 124.0
+        },
+        "token_count": {
+          "min": 2,
+          "max": 43,
+          "mean": 8.032160741627889,
+          "median": 7.0
+        },
+        "non_ascii_count": 554,
+        "non_ascii_pct": 0.025,
+        "top_repeated": [
+          {
+            "address": "108 Norle Street, College Twp, PA",
+            "count": 14
+          },
+          {
+            "address": "43 Franklin Street, Delaware, OH",
+            "count": 13
+          },
+          {
+            "address": "218 Phillips Street, Storm Lake, IA",
+            "count": 13
+          },
+          {
+            "address": "1921 Willow Park Drive, Fort Worth, TX",
+            "count": 13
+          },
+          {
+            "address": "104 Roadrunner Circle, Elephant Butte, NM",
+            "count": 13
+          },
+          {
+            "address": "55, Lavkush Vihar, Singhpur, Kachhar Bithoor Road, Kalyanpur, Kanpur Nagar, Uttar Pradesh",
+            "count": 13
+          },
+          {
+            "address": "4804 Gardenia Avenue, Glendale, AZ",
+            "count": 12
+          },
+          {
+            "address": "520 Kathy Lane, Bldg 10, Dayton, TN",
+            "count": 12
+          },
+          {
+            "address": "4024 High Creek Road, Bismarck, ND",
+            "count": 12
+          },
+          {
+            "address": "333 Court Avenue, Selmer, TN",
+            "count": 12
+          }
+        ]
+      },
+      "analysis_time_seconds": 6.05
+    },
+    "source2": {
+      "source": "source2",
+      "file_path": "data/raw/train/train_source2.tsv",
+      "total_records": 5034616,
+      "unique_entity_ids": 5034616,
+      "duplicate_entity_ids": 0,
+      "schema": {
+        "entity_id": "String",
+        "business_name": "String",
+        "business_address": "String",
+        "country": "String"
+      },
+      "missing_columns": [],
+      "unexpected_columns": [],
+      "missing_values": {
+        "entity_id": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_name": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_address": {
+          "missing_count": 168967,
+          "missing_pct": 3.3561
+        },
+        "country": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        }
+      },
+      "country_distribution": [
+        {
+          "country": "US",
+          "count": 3016817,
+          "pct": 59.921
+        },
+        {
+          "country": "India",
+          "count": 2017799,
+          "pct": 40.079
+        }
+      ],
+      "business_name_stats": {
+        "valid_count": 5034616,
+        "unique_count": 4402009,
+        "duplicate_count": 632607,
+        "char_length": {
+          "min": 2,
+          "max": 104,
+          "mean": 25.103574930044317,
+          "median": 25.0,
+          "p90": 37.0,
+          "p99": 48.0
+        },
+        "token_count": {
+          "min": 1,
+          "max": 16,
+          "mean": 3.6067408120102904,
+          "median": 4.0
+        },
+        "non_ascii_count": 764608,
+        "non_ascii_pct": 15.187,
+        "top_repeated": [
+          {
+            "name": "Primary Care",
+            "count": 320
+          },
+          {
+            "name": "Physical Therapy",
+            "count": 307
+          },
+          {
+            "name": "Urgent Care",
+            "count": 297
+          },
+          {
+            "name": "Womens Health",
+            "count": 297
+          },
+          {
+            "name": "Behavioral Health",
+            "count": 296
+          },
+          {
+            "name": "Internal Medicine",
+            "count": 288
+          },
+          {
+            "name": "Pediatric Dentistry",
+            "count": 274
+          },
+          {
+            "name": "earnosethroat.com",
+            "count": 269
+          },
+          {
+            "name": "Pediatric Dental",
+            "count": 268
+          },
+          {
+            "name": "Ear Nose & Throat",
+            "count": 220
+          }
+        ]
+      },
+      "business_address_stats": {
+        "valid_count": 4865649,
+        "unique_count": 4337261,
+        "duplicate_count": 528388,
+        "char_length": {
+          "min": 8,
+          "max": 249,
+          "mean": 47.831172984323366,
+          "median": 37.0,
+          "p90": 84.0,
+          "p99": 118.0
+        },
+        "token_count": {
+          "min": 2,
+          "max": 46,
+          "mean": 7.560276748281678,
+          "median": 6.0
+        },
+        "non_ascii_count": 478453,
+        "non_ascii_pct": 9.833,
+        "top_repeated": [
+          {
+            "address": "842 38, CALEDONAI TOWNSHIP, WI",
+            "count": 18
+          },
+          {
+            "address": "1948 WEAVER FOREST WAY, MORRISVILLE, NC",
+            "count": 18
+          },
+          {
+            "address": "66 FRANK EDGE, ALTO, TX",
+            "count": 17
+          },
+          {
+            "address": "302 REGENCY CT, AMES, IA",
+            "count": 16
+          },
+          {
+            "address": "G-58/1, BENSON CROSS ROAD, BANGALORE., Karnataka",
+            "count": 16
+          },
+          {
+            "address": "55 500, SALT LAKE CITY, UT",
+            "count": 16
+          },
+          {
+            "address": "##1105 M, NULL, BIRMINGHAM, AL",
+            "count": 16
+          },
+          {
+            "address": "06252 TALIAFERRO WAY, ALEANDRIA, VA",
+            "count": 15
+          },
+          {
+            "address": "5335 FM 2412, GATESVILLE, TX",
+            "count": 15
+          },
+          {
+            "address": "3710 GOLDFIELD RD, APACHE JUNCTION, AZ",
+            "count": 15
+          }
+        ]
+      },
+      "analysis_time_seconds": 15.01
+    },
+    "source3": {
+      "source": "source3",
+      "file_path": "data/raw/train/train_source3.tsv",
+      "total_records": 5285603,
+      "unique_entity_ids": 5285603,
+      "duplicate_entity_ids": 0,
+      "schema": {
+        "entity_id": "String",
+        "business_name": "String",
+        "business_address": "String",
+        "country": "String"
+      },
+      "missing_columns": [],
+      "unexpected_columns": [],
+      "missing_values": {
+        "entity_id": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_name": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        },
+        "business_address": {
+          "missing_count": 175916,
+          "missing_pct": 3.3282
+        },
+        "country": {
+          "missing_count": 0,
+          "missing_pct": 0.0
+        }
+      },
+      "country_distribution": [
+        {
+          "country": "US",
+          "count": 3170056,
+          "pct": 59.975
+        },
+        {
+          "country": "India",
+          "count": 2115547,
+          "pct": 40.025
+        }
+      ],
+      "business_name_stats": {
+        "valid_count": 5285603,
+        "unique_count": 4651609,
+        "duplicate_count": 633994,
+        "char_length": {
+          "min": 2,
+          "max": 123,
+          "mean": 25.202143823514554,
+          "median": 25.0,
+          "p90": 37.0,
+          "p99": 50.0
+        },
+        "token_count": {
+          "min": 1,
+          "max": 18,
+          "mean": 3.6343613018230845,
+          "median": 4.0
+        },
+        "non_ascii_count": 606737,
+        "non_ascii_pct": 11.479,
+        "top_repeated": [
+          {
+            "name": "Primary Care",
+            "count": 421
+          },
+          {
+            "name": "Physical Therapy",
+            "count": 399
+          },
+          {
+            "name": "Pediatric Dental",
+            "count": 393
+          },
+          {
+            "name": "Womens Health",
+            "count": 379
+          },
+          {
+            "name": "Urgent Care",
+            "count": 377
+          },
+          {
+            "name": "Pediatric Dentistry",
+            "count": 361
+          },
+          {
+            "name": "Behavioral Health",
+            "count": 330
+          },
+          {
+            "name": "Pediatric",
+            "count": 321
+          },
+          {
+            "name": "Internal Medicine",
+            "count": 319
+          },
+          {
+            "name": "The Dent",
+            "count": 254
+          }
+        ]
+      },
+      "business_address_stats": {
+        "valid_count": 5109687,
+        "unique_count": 4632764,
+        "duplicate_count": 476923,
+        "char_length": {
+          "min": 2,
+          "max": 240,
+          "mean": 48.32271918025507,
+          "median": 42.0,
+          "p90": 78.0,
+          "p99": 116.0
+        },
+        "token_count": {
+          "min": 1,
+          "max": 43,
+          "mean": 7.4198272810056665,
+          "median": 6.0
+        },
+        "non_ascii_count": 476588,
+        "non_ascii_pct": 9.327,
+        "top_repeated": [
+          {
+            "address": "Ground Floor, Bangalore, KA",
+            "count": 29
+          },
+          {
+            "address": "18, Kolkata, Howrah, WB",
+            "count": 26
+          },
+          {
+            "address": "Floor, Mumbai, MH",
+            "count": 26
+          },
+          {
+            "address": "303, Mumbai, MH",
+            "count": 25
+          },
+          {
+            "address": "12, Ahmedabad, GJ",
+            "count": 23
+          },
+          {
+            "address": "101, Mumbai, Mumbai City, MH",
+            "count": 23
+          },
+          {
+            "address": "4, Mumbai, MH",
+            "count": 23
+          },
+          {
+            "address": "Floor, Bangalore, KA",
+            "count": 22
+          },
+          {
+            "address": "301, Mumbai, Mumbai City, MH",
+            "count": 21
+          },
+          {
+            "address": "3, Ahmedabad, GJ",
+            "count": 21
+          }
+        ]
+      },
+      "analysis_time_seconds": 14.45
+    }
+  },
+  "processed": {
+    "source1": {
+      "source": "source1",
+      "directory": "data/processed/train/source1",
+      "partition_count": 221,
+      "total_rows": 2206821,
+      "schema_columns": [
+        "source",
+        "entity_id",
+        "business_name",
+        "business_name_script",
+        "business_name_language",
+        "business_name_transliterated",
+        "business_name_normalized",
+        "business_name_tokens",
+        "business_address",
+        "business_address_script",
+        "business_address_language",
+        "business_address_transliterated",
+        "business_address_normalized",
+        "business_address_tokens",
+        "country",
+        "country_normalized"
+      ],
+      "schema_types": {
+        "source": "String",
+        "entity_id": "String",
+        "business_name": "String",
+        "business_name_script": "String",
+        "business_name_language": "String",
+        "business_name_transliterated": "String",
+        "business_name_normalized": "String",
+        "business_name_tokens": "List(String)",
+        "business_address": "String",
+        "business_address_script": "String",
+        "business_address_language": "String",
+        "business_address_transliterated": "String",
+        "business_address_normalized": "String",
+        "business_address_tokens": "List(String)",
+        "country": "String",
+        "country_normalized": "String"
+      },
+      "name_scripts": [
+        {
+          "script": "Latin",
+          "count": 2206821,
+          "pct": 100.0
+        }
+      ],
+      "address_scripts": [
+        {
+          "script": "Latin",
+          "count": 2206821,
+          "pct": 100.0
+        }
+      ],
+      "transformations": {
+        "business_name_transliterated": {
+          "non_null_count": 2206821,
+          "changed_count": 0,
+          "changed_pct": 0.0
+        },
+        "business_name_normalized": {
+          "non_null_count": 2206821,
+          "changed_count": 2206821,
+          "changed_pct": 100.0
+        },
+        "business_address_transliterated": {
+          "non_null_count": 2206821,
+          "changed_count": 0,
+          "changed_pct": 0.0
+        },
+        "business_address_normalized": {
+          "non_null_count": 2206821,
+          "changed_count": 2206821,
+          "changed_pct": 100.0
+        },
+        "country_normalized": {
+          "non_null_count": 2206821,
+          "changed_count": 2206821,
+          "changed_pct": 100.0
+        }
+      },
+      "distinct_metrics": {
+        "unique_raw_name": 1539229,
+        "unique_norm_name": 1505740,
+        "name_distinct_reduction_pct": 2.176,
+        "unique_raw_addr": 2130606,
+        "unique_norm_addr": 2130298,
+        "addr_distinct_reduction_pct": 0.014,
+        "unique_name_country_keys": 1506417,
+        "unique_addr_country_keys": 2130298
+      },
+      "top_repeated_norm_names": [
+        {
+          "name": "primary care group",
+          "count": 253
+        },
+        {
+          "name": "ear nose & throat group",
+          "count": 251
+        },
+        {
+          "name": "pediatric group",
+          "count": 222
+        },
+        {
+          "name": "womens health group",
+          "count": 220
+        },
+        {
+          "name": "physical therapy group",
+          "count": 218
+        },
+        {
+          "name": "pediatric dental group",
+          "count": 216
+        },
+        {
+          "name": "behavioral health group",
+          "count": 215
+        },
+        {
+          "name": "chiropractic group",
+          "count": 209
+        },
+        {
+          "name": "orthopedic group",
+          "count": 208
+        },
+        {
+          "name": "eye group",
+          "count": 207
+        }
+      ],
+      "top_repeated_norm_addrs": [
+        {
+          "address": "108 norle street college twp pa",
+          "count": 14
+        },
+        {
+          "address": "43 franklin street delaware oh",
+          "count": 13
+        },
+        {
+          "address": "218 phillips street storm lake ia",
+          "count": 13
+        },
+        {
+          "address": "1921 willow park drive fort worth tx",
+          "count": 13
+        },
+        {
+          "address": "55 lavkush vihar singhpur kachhar bithoor road kalyanpur kanpur nagar uttar pradesh",
+          "count": 13
+        },
+        {
+          "address": "104 roadrunner circle elephant butte nm",
+          "count": 13
+        },
+        {
+          "address": "4024 high creek road bismarck nd",
+          "count": 12
+        },
+        {
+          "address": "415 northfield boulevard unit a11 murfreesboro tn",
+          "count": 12
+        },
+        {
+          "address": "3276 rosedale drive arnold mo",
+          "count": 12
+        },
+        {
+          "address": "520 kathy lane bldg 10 dayton tn",
+          "count": 12
+        }
+      ],
+      "analysis_time_seconds": 7.89
+    },
+    "source2": {
+      "source": "source2",
+      "directory": "data/processed/train/source2",
+      "partition_count": 504,
+      "total_rows": 5034616,
+      "schema_columns": [
+        "source",
+        "entity_id",
+        "business_name",
+        "business_name_script",
+        "business_name_language",
+        "business_name_transliterated",
+        "business_name_normalized",
+        "business_name_tokens",
+        "business_address",
+        "business_address_script",
+        "business_address_language",
+        "business_address_transliterated",
+        "business_address_normalized",
+        "business_address_tokens",
+        "country",
+        "country_normalized"
+      ],
+      "schema_types": {
+        "source": "String",
+        "entity_id": "String",
+        "business_name": "String",
+        "business_name_script": "String",
+        "business_name_language": "String",
+        "business_name_transliterated": "String",
+        "business_name_normalized": "String",
+        "business_name_tokens": "List(String)",
+        "business_address": "String",
+        "business_address_script": "String",
+        "business_address_language": "String",
+        "business_address_transliterated": "String",
+        "business_address_normalized": "String",
+        "business_address_tokens": "List(String)",
+        "country": "String",
+        "country_normalized": "String"
+      },
+      "name_scripts": [
+        {
+          "script": "Latin",
+          "count": 4560077,
+          "pct": 90.574
+        },
+        {
+          "script": "Devanagari",
+          "count": 258863,
+          "pct": 5.142
+        },
+        {
+          "script": "Telugu",
+          "count": 37799,
+          "pct": 0.751
+        },
+        {
+          "script": "Kannada",
+          "count": 35787,
+          "pct": 0.711
+        },
+        {
+          "script": "Tamil",
+          "count": 32440,
+          "pct": 0.644
+        },
+        {
+          "script": "Gujarati",
+          "count": 29700,
+          "pct": 0.59
+        },
+        {
+          "script": "Bengali",
+          "count": 29497,
+          "pct": 0.586
+        },
+        {
+          "script": "Mixed",
+          "count": 18586,
+          "pct": 0.369
+        },
+        {
+          "script": "Malayalam",
+          "count": 18062,
+          "pct": 0.359
+        },
+        {
+          "script": "Odia",
+          "count": 7194,
+          "pct": 0.143
+        },
+        {
+          "script": "Gurmukhi",
+          "count": 6417,
+          "pct": 0.127
+        },
+        {
+          "script": "Unknown",
+          "count": 194,
+          "pct": 0.004
+        }
+      ],
+      "address_scripts": [
+        {
+          "script": "Latin",
+          "count": 4388128,
+          "pct": 87.159
+        },
+        {
+          "script": "Mixed",
+          "count": 477521,
+          "pct": 9.485
+        },
+        {
+          "script": "NULL",
+          "count": 168967,
+          "pct": 3.356
+        }
+      ],
+      "transformations": {
+        "business_name_transliterated": {
+          "non_null_count": 5034616,
+          "changed_count": 474345,
+          "changed_pct": 9.422
+        },
+        "business_name_normalized": {
+          "non_null_count": 5034616,
+          "changed_count": 4940342,
+          "changed_pct": 98.127
+        },
+        "business_address_transliterated": {
+          "non_null_count": 4865649,
+          "changed_count": 477521,
+          "changed_pct": 9.485
+        },
+        "business_address_normalized": {
+          "non_null_count": 4865649,
+          "changed_count": 4865649,
+          "changed_pct": 96.644
+        },
+        "country_normalized": {
+          "non_null_count": 5034616,
+          "changed_count": 5034616,
+          "changed_pct": 100.0
+        }
+      },
+      "distinct_metrics": {
+        "unique_raw_name": 4402009,
+        "unique_norm_name": 3922750,
+        "name_distinct_reduction_pct": 10.887,
+        "unique_raw_addr": 4337262,
+        "unique_norm_addr": 4281868,
+        "addr_distinct_reduction_pct": 1.277,
+        "unique_name_country_keys": 3927630,
+        "unique_addr_country_keys": 4281869
+      },
+      "top_repeated_norm_names": [
+        {
+          "name": "physical therapy",
+          "count": 514
+        },
+        {
+          "name": "primary care",
+          "count": 511
+        },
+        {
+          "name": "womens health",
+          "count": 470
+        },
+        {
+          "name": "urgent care",
+          "count": 467
+        },
+        {
+          "name": "behavioral health",
+          "count": 459
+        },
+        {
+          "name": "internal medicine",
+          "count": 455
+        },
+        {
+          "name": "pediatric dental",
+          "count": 448
+        },
+        {
+          "name": "pediatric dentistry",
+          "count": 442
+        },
+        {
+          "name": "earnosethroat com",
+          "count": 363
+        },
+        {
+          "name": "ear nose & throat",
+          "count": 315
+        }
+      ],
+      "top_repeated_norm_addrs": [
+        {
+          "address": "g-58/1 benson cross road bangalore karnataka",
+          "count": 20
+        },
+        {
+          "address": "1948 weaver forest way morrisville nc",
+          "count": 19
+        },
+        {
+          "address": "17200 bell rd surprise az",
+          "count": 18
+        },
+        {
+          "address": "842 38 caledonai township wi",
+          "count": 18
+        },
+        {
+          "address": "3710 goldfield rd apache junction az",
+          "count": 17
+        },
+        {
+          "address": "66 frank edge alto tx",
+          "count": 17
+        },
+        {
+          "address": "302 regency ct ames ia",
+          "count": 16
+        },
+        {
+          "address": "06252 taliaferro way aleandria va",
+          "count": 16
+        },
+        {
+          "address": "1105 m null birmingham al",
+          "count": 16
+        },
+        {
+          "address": "908 power road mesa desert az",
+          "count": 16
+        }
+      ],
+      "analysis_time_seconds": 18.84
+    },
+    "source3": {
+      "source": "source3",
+      "directory": "data/processed/train/source3",
+      "partition_count": 529,
+      "total_rows": 5285603,
+      "schema_columns": [
+        "source",
+        "entity_id",
+        "business_name",
+        "business_name_script",
+        "business_name_language",
+        "business_name_transliterated",
+        "business_name_normalized",
+        "business_name_tokens",
+        "business_address",
+        "business_address_script",
+        "business_address_language",
+        "business_address_transliterated",
+        "business_address_normalized",
+        "business_address_tokens",
+        "country",
+        "country_normalized"
+      ],
+      "schema_types": {
+        "source": "String",
+        "entity_id": "String",
+        "business_name": "String",
+        "business_name_script": "String",
+        "business_name_language": "String",
+        "business_name_transliterated": "String",
+        "business_name_normalized": "String",
+        "business_name_tokens": "List(String)",
+        "business_address": "String",
+        "business_address_script": "String",
+        "business_address_language": "String",
+        "business_address_transliterated": "String",
+        "business_address_normalized": "String",
+        "business_address_tokens": "List(String)",
+        "country": "String",
+        "country_normalized": "String"
+      },
+      "name_scripts": [
+        {
+          "script": "Latin",
+          "count": 5006656,
+          "pct": 94.723
+        },
+        {
+          "script": "Devanagari",
+          "count": 138187,
+          "pct": 2.614
+        },
+        {
+          "script": "Mixed",
+          "count": 34894,
+          "pct": 0.66
+        },
+        {
+          "script": "Telugu",
+          "count": 20088,
+          "pct": 0.38
+        },
+        {
+          "script": "Kannada",
+          "count": 19254,
+          "pct": 0.364
+        },
+        {
+          "script": "Tamil",
+          "count": 17346,
+          "pct": 0.328
+        },
+        {
+          "script": "Bengali",
+          "count": 15863,
+          "pct": 0.3
+        },
+        {
+          "script": "Gujarati",
+          "count": 15746,
+          "pct": 0.298
+        },
+        {
+          "script": "Malayalam",
+          "count": 9759,
+          "pct": 0.185
+        },
+        {
+          "script": "Odia",
+          "count": 3781,
+          "pct": 0.072
+        },
+        {
+          "script": "Gurmukhi",
+          "count": 3606,
+          "pct": 0.068
+        },
+        {
+          "script": "Unknown",
+          "count": 423,
+          "pct": 0.008
+        }
+      ],
+      "address_scripts": [
+        {
+          "script": "Latin",
+          "count": 4633909,
+          "pct": 87.67
+        },
+        {
+          "script": "Mixed",
+          "count": 475691,
+          "pct": 9.0
+        },
+        {
+          "script": "NULL",
+          "count": 175916,
+          "pct": 3.328
+        },
+        {
+          "script": "Devanagari",
+          "count": 46,
+          "pct": 0.001
+        },
+        {
+          "script": "Tamil",
+          "count": 12,
+          "pct": 0.0
+        },
+        {
+          "script": "Gujarati",
+          "count": 9,
+          "pct": 0.0
+        },
+        {
+          "script": "Kannada",
+          "count": 9,
+          "pct": 0.0
+        },
+        {
+          "script": "Telugu",
+          "count": 5,
+          "pct": 0.0
+        },
+        {
+          "script": "Malayalam",
+          "count": 4,
+          "pct": 0.0
+        },
+        {
+          "script": "Bengali",
+          "count": 1,
+          "pct": 0.0
+        },
+        {
+          "script": "Odia",
+          "count": 1,
+          "pct": 0.0
+        }
+      ],
+      "transformations": {
+        "business_name_transliterated": {
+          "non_null_count": 5285603,
+          "changed_count": 278524,
+          "changed_pct": 5.269
+        },
+        "business_name_normalized": {
+          "non_null_count": 5285603,
+          "changed_count": 5171970,
+          "changed_pct": 97.85
+        },
+        "business_address_transliterated": {
+          "non_null_count": 5109687,
+          "changed_count": 475778,
+          "changed_pct": 9.001
+        },
+        "business_address_normalized": {
+          "non_null_count": 5109687,
+          "changed_count": 5109687,
+          "changed_pct": 96.672
+        },
+        "country_normalized": {
+          "non_null_count": 5285603,
+          "changed_count": 5285603,
+          "changed_pct": 100.0
+        }
+      },
+      "distinct_metrics": {
+        "unique_raw_name": 4651609,
+        "unique_norm_name": 4173357,
+        "name_distinct_reduction_pct": 10.281,
+        "unique_raw_addr": 4632765,
+        "unique_norm_addr": 4619684,
+        "addr_distinct_reduction_pct": 0.282,
+        "unique_name_country_keys": 4180615,
+        "unique_addr_country_keys": 4619685
+      },
+      "top_repeated_norm_names": [
+        {
+          "name": "physical therapy",
+          "count": 510
+        },
+        {
+          "name": "primary care",
+          "count": 499
+        },
+        {
+          "name": "pediatric dental",
+          "count": 493
+        },
+        {
+          "name": "urgent care",
+          "count": 477
+        },
+        {
+          "name": "womens health",
+          "count": 459
+        },
+        {
+          "name": "pediatric dentistry",
+          "count": 453
+        },
+        {
+          "name": "behavioral health",
+          "count": 422
+        },
+        {
+          "name": "internal medicine",
+          "count": 414
+        },
+        {
+          "name": "pediatric",
+          "count": 327
+        },
+        {
+          "name": "earnosethroat com",
+          "count": 326
+        }
+      ],
+      "top_repeated_norm_addrs": [
+        {
+          "address": "1 bangalore ka",
+          "count": 35
+        },
+        {
+          "address": "1 kolkata howrah wb",
+          "count": 32
+        },
+        {
+          "address": "18 kolkata howrah wb",
+          "count": 32
+        },
+        {
+          "address": "ground floor bangalore ka",
+          "count": 29
+        },
+        {
+          "address": "5 ahmedabad gj",
+          "count": 28
+        },
+        {
+          "address": "12 ahmedabad gj",
+          "count": 27
+        },
+        {
+          "address": "303 mumbai mh",
+          "count": 27
+        },
+        {
+          "address": "3 bangalore ka",
+          "count": 26
+        },
+        {
+          "address": "5 chennai tn",
+          "count": 26
+        },
+        {
+          "address": "floor mumbai mh",
+          "count": 26
+        }
+      ],
+      "analysis_time_seconds": 18.74
+    }
+  }
+}
