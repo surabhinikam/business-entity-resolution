@@ -18,6 +18,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
+from src.analysis.data_loader import discover_parquet_files
 from src.candidate_generation.block_index import BlockIndex
 from src.features.feature_pipeline import FeaturePipeline
 from src.features.feature_schema import (
@@ -29,7 +30,7 @@ from src.features.feature_schema import (
 ACTIVE_KEYS = ["A", "C", "D", "E", "F"]
 MAX_BLOCK_SIZE = 5000
 DEFAULT_SAMPLE_SIZE = 500_000
-DEFAULT_OUTPUT = "data/processed/train/dev_features/phase4_dev_500k.parquet"
+DEFAULT_OUTPUT = "data/processed/train/dev_features/phase4_dev_corrected.parquet"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,7 +42,7 @@ logger = logging.getLogger("phase4_dev_features")
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Persist a deterministic bounded Phase 3 feature sample."
+        description="Persist a deterministic bounded Phase 4 feature sample."
     )
     parser.add_argument(
         "--sample-size",
@@ -57,20 +58,67 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--allow-smaller",
         action="store_true",
-        help="Write all available candidates when fewer than --sample-size exist.",
+        default=True,
+        help="Write all available candidates when fewer than --sample-size exist (default: True).",
+    )
+    parser.add_argument(
+        "--s1-files",
+        type=int,
+        default=3,
+        help="Number of source1 partition files to load (default: 3).",
+    )
+    parser.add_argument(
+        "--s2-files",
+        type=int,
+        default=6,
+        help="Number of genuine source2 partition files to load (default: 6).",
+    )
+    parser.add_argument(
+        "--s3-files",
+        type=int,
+        default=6,
+        help="Number of genuine source3 partition files to load (default: 6).",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite output file if it exists.",
     )
     return parser.parse_args()
 
 
-def load_bounded_partitions() -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
-    s1_files = sorted(glob.glob("data/processed/train/source1/*.parquet"))[:3]
-    s2_files = sorted(glob.glob("data/processed/train/source2/*.parquet"))[:4]
-    s3_files = sorted(glob.glob("data/processed/train/source3/*.parquet"))[:4]
+def load_bounded_partitions(
+    num_s1: int = 3,
+    num_s2: int = 6,
+    num_s3: int = 6,
+) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
+    s1_files = discover_parquet_files("data/processed/train/source1", source="source1")[:num_s1]
+    s2_files = discover_parquet_files("data/processed/train/source2", source="source2")[:num_s2]
+    s3_files = discover_parquet_files("data/processed/train/source3", source="source3")[:num_s3]
 
     if not s1_files or not s2_files or not s3_files:
         raise FileNotFoundError(
             "Expected bounded processed partitions were not found for source1, source2, and source3."
         )
+
+    # Strict partition verification
+    for f in s1_files:
+        base = os.path.basename(f)
+        if "source1" not in base:
+            raise ValueError(f"Invalid non-source1 file in source1 partitions: {f}")
+    for f in s2_files:
+        base = os.path.basename(f)
+        if "source2" not in base or base.startswith("train_source1"):
+            raise ValueError(f"Invalid non-source2 file in source2 partitions: {f}")
+    for f in s3_files:
+        base = os.path.basename(f)
+        if "source3" not in base:
+            raise ValueError(f"Invalid non-source3 file in source3 partitions: {f}")
+
+    logger.info("Discovered genuine partition files:")
+    logger.info("  S1 files: %s", [os.path.basename(f) for f in s1_files])
+    logger.info("  S2 files: %s", [os.path.basename(f) for f in s2_files])
+    logger.info("  S3 files: %s", [os.path.basename(f) for f in s3_files])
 
     return (
         pl.concat([pl.read_parquet(path) for path in s1_files]),
@@ -89,16 +137,23 @@ def build_candidate_sample(
     index = BlockIndex(max_block_size=MAX_BLOCK_SIZE)
 
     for row in s1_df.iter_rows(named=True):
-        index.add_s1_record(row["entity_id"], row, active_keys=ACTIVE_KEYS)
+        entity_id = row["entity_id"]
+        if not entity_id.startswith("S1-"):
+            raise ValueError(f"Invalid entity_id format for source1 record: {entity_id}")
+        index.add_s1_record(entity_id, row, active_keys=ACTIVE_KEYS)
 
     candidate_source_by_id: dict[str, str] = {}
     for row in s2_df.iter_rows(named=True):
         entity_id = row["entity_id"]
+        if not entity_id.startswith("S2-"):
+            raise ValueError(f"Invalid entity_id format for source2 record: {entity_id}")
         candidate_source_by_id[entity_id] = "source2"
         index.add_candidate_record(entity_id, row, active_keys=ACTIVE_KEYS)
 
     for row in s3_df.iter_rows(named=True):
         entity_id = row["entity_id"]
+        if not entity_id.startswith("S3-"):
+            raise ValueError(f"Invalid entity_id format for source3 record: {entity_id}")
         candidate_source_by_id[entity_id] = "source3"
         index.add_candidate_record(entity_id, row, active_keys=ACTIVE_KEYS)
 
@@ -162,17 +217,13 @@ def validate_features(features_df: pl.DataFrame, expected_rows: int) -> None:
         raise ValueError("Duplicate candidate pair IDs detected in the feature output.")
 
 
-def write_features(features_df: pl.DataFrame, output_path: str) -> None:
+def write_features(features_df: pl.DataFrame, output_path: str, overwrite: bool = False) -> None:
     path = Path(output_path)
-    if path.exists():
+    if path.exists() and not overwrite:
         raise FileExistsError(
-            f"Refusing to overwrite existing output file: {path}"
+            f"Refusing to overwrite existing output file: {path}. Pass --overwrite to overwrite."
         )
     path.parent.mkdir(parents=True, exist_ok=True)
-    if path.exists():
-        raise FileExistsError(
-            f"Refusing to overwrite existing output file: {path}"
-        )
     features_df.write_parquet(path)
 
 
@@ -183,13 +234,17 @@ def main() -> None:
 
     started = time.perf_counter()
     output_path = Path(args.output)
-    if output_path.exists():
+    if output_path.exists() and not args.overwrite:
         raise FileExistsError(
-            f"Refusing to overwrite existing output file: {output_path}"
+            f"Refusing to overwrite existing output file: {output_path}. Pass --overwrite to overwrite."
         )
 
     logger.info("Loading bounded processed partitions...")
-    s1_df, s2_df, s3_df = load_bounded_partitions()
+    s1_df, s2_df, s3_df = load_bounded_partitions(
+        num_s1=args.s1_files,
+        num_s2=args.s2_files,
+        num_s3=args.s3_files,
+    )
     logger.info(
         "Loaded partitions: S1=%s, S2=%s, S3=%s records",
         f"{s1_df.height:,}",
@@ -218,7 +273,7 @@ def main() -> None:
         pair_provenance=pair_provenance,
     )
     validate_features(features_df, candidate_pairs_df.height)
-    write_features(features_df, args.output)
+    write_features(features_df, args.output, overwrite=args.overwrite)
 
     source_counts = (
         features_df.group_by("candidate_source")

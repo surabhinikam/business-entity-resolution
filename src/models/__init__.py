@@ -19,6 +19,16 @@ from src.models.post_processing import (
     MatchPostProcessor,
     compute_prediction_diagnostics,
 )
+from src.models.phase4_interactions import (
+    ALL_INTERACTION_FEATURES,
+    BASELINE_FEATURES,
+    EXPERIMENT_SPECS,
+    EXP_A_FEATURES,
+    EXP_B_FEATURES,
+    EXP_C_FEATURES,
+    EXP_ALL_FEATURES,
+    compute_interaction_features,
+)
 
 __all__ = [
     "compute_f_beta",
@@ -32,4 +42,13 @@ __all__ = [
     "optimize_threshold_oof",
     "MatchPostProcessor",
     "compute_prediction_diagnostics",
+    "ALL_INTERACTION_FEATURES",
+    "BASELINE_FEATURES",
+    "EXPERIMENT_SPECS",
+    "EXP_A_FEATURES",
+    "EXP_B_FEATURES",
+    "EXP_C_FEATURES",
+    "EXP_ALL_FEATURES",
+    "compute_interaction_features",
 ]
+
