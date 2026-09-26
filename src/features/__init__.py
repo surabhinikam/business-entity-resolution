@@ -47,6 +47,8 @@ from src.features.cross_features import (
 )
 from src.features.blocking_features import (
     compute_blocking_features,
+    compute_blocking_pair_features,
+    extract_blocking_features_batch,
     extract_blocking_features_from_provenance_dict,
     extract_blocking_features_from_keys,
 )
@@ -82,6 +84,8 @@ __all__ = [
     "compute_cross_features",
     "extract_cross_features_batch",
     "compute_blocking_features",
+    "compute_blocking_pair_features",
+    "extract_blocking_features_batch",
     "extract_blocking_features_from_provenance_dict",
     "extract_blocking_features_from_keys",
     "Person2FeaturePipeline",
