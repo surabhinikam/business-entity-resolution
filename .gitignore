@@ -22,3 +22,6 @@ notebooks/.ipynb_checkpoints/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+#Vs code
+.vscode
