@@ -1,0 +1,555 @@
+{
+  "final_5key_cap_5000": {
+    "total_candidates": 56901102,
+    "candidate_s1_ratio": 25.78,
+    "blocking_recall": 0.684658,
+    "recovered_pairs": 5229665,
+    "s1_to_s2_recall": 0.693645,
+    "s1_to_s3_recall": 0.676243,
+    "us_recall": 0.74246,
+    "india_recall": 0.598167,
+    "oversized_blocks": 4264,
+    "recall_lost_pct": 5.91,
+    "reduction_ratio": 0.9999975
+  },
+  "cap_sensitivity": [
+    {
+      "cap": 5000,
+      "total_candidates": 56901102,
+      "candidate_s1_ratio": 25.78,
+      "blocking_recall": 0.684658,
+      "recovered_pairs": 5229665,
+      "s1_to_s2_recall": 0.693645,
+      "s1_to_s3_recall": 0.676243,
+      "us_recall": 0.74246,
+      "india_recall": 0.598167,
+      "oversized_blocks": 4264,
+      "recall_lost_pct": 5.91,
+      "reduction_ratio": 0.9999975
+    },
+    {
+      "cap": 10000,
+      "total_candidates": 69659152,
+      "candidate_s1_ratio": 31.57,
+      "blocking_recall": 0.691868,
+      "recovered_pairs": 5284738,
+      "s1_to_s2_recall": 0.70083,
+      "s1_to_s3_recall": 0.683476,
+      "us_recall": 0.749186,
+      "india_recall": 0.606101,
+      "oversized_blocks": 2426,
+      "recall_lost_pct": 4.919,
+      "reduction_ratio": 0.99999694
+    },
+    {
+      "cap": 50000,
+      "total_candidates": 105923234,
+      "candidate_s1_ratio": 48.0,
+      "blocking_recall": 0.702222,
+      "recovered_pairs": 5363829,
+      "s1_to_s2_recall": 0.711191,
+      "s1_to_s3_recall": 0.693825,
+      "us_recall": 0.761731,
+      "india_recall": 0.613177,
+      "oversized_blocks": 538,
+      "recall_lost_pct": 3.496,
+      "reduction_ratio": 0.99999535
+    },
+    {
+      "cap": null,
+      "total_candidates": 1671125673,
+      "candidate_s1_ratio": 757.25,
+      "blocking_recall": 0.727662,
+      "recovered_pairs": 5558149,
+      "s1_to_s2_recall": 0.733787,
+      "s1_to_s3_recall": 0.721928,
+      "us_recall": 0.781118,
+      "india_recall": 0.647674,
+      "oversized_blocks": 0,
+      "recall_lost_pct": 0.0,
+      "reduction_ratio": 0.99992662
+    }
+  ],
+  "zero_key_analysis": {
+    "total_uncovered": 2080216,
+    "uncovered_pct": 27.23,
+    "sample_size": 150,
+    "failure_categories": {
+      "completely_different_name": 35,
+      "transliteration_partial": 38,
+      "second_token_or_address_number_divergence": 33,
+      "word_order_transposition": 31,
+      "first_token_spelling_variation": 4,
+      "missing_address_name_typo": 7,
+      "transliteration_divergence": 2
+    },
+    "sample_details": {
+      "completely_different_name": [
+        {
+          "s1_id": "S1-347767539",
+          "cand_id": "S3-368421370",
+          "source": "source3",
+          "s1_name": "India Dj Bandhan Private Limited",
+          "cand_name": "indiadjbandhan.com",
+          "s1_norm_name": "india dj bandhan pvt ltd",
+          "cand_norm_name": "indiadjbandhan com",
+          "s1_addr": "Pune, Krupaprasad Apts, Sr, No.133 2Nd Floor, Parvati Darshan Soc Singhagad, Off:No. 201, Pune, Maharashtra",
+          "cand_addr": "Off:no. 201, Krupaprasad Apts, Sr, No.133 2Nd Floor, Parvati Darshan Soc Singhagad, Pune, MH",
+          "s1_norm_addr": "pune krupaprasad apts sr no133 2nd floor parvati darshan soc singhagad off no 201 pune maharashtra",
+          "cand_norm_addr": "off no 201 krupaprasad apts sr no133 2nd floor parvati darshan soc singhagad pune mh",
+          "country": "india",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-954250275",
+          "cand_id": "S2-995534671",
+          "source": "source2",
+          "s1_name": "Caldos Community",
+          "cand_name": "Veraquonex",
+          "s1_norm_name": "caldos community",
+          "cand_norm_name": "veraquonex",
+          "s1_addr": "4244 27th Avenue, Minneapolis, MN",
+          "cand_addr": "4244-C 27RD AVE, MINNEAPOLIS, MN",
+          "s1_norm_addr": "4244 27th avenue minneapolis mn",
+          "cand_norm_addr": "4244-c 27rd ave minneapolis mn",
+          "country": "united states",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-242916314",
+          "cand_id": "S2-920321293",
+          "source": "source2",
+          "s1_name": "Patriot Center",
+          "cand_name": "patriotcenter.com",
+          "s1_norm_name": "patriot center",
+          "cand_norm_name": "patriotcenter com",
+          "s1_addr": "2981 Mcdonald Road, Lancaster, OH",
+          "cand_addr": "2981B MCDONALD RD, MADISON TWP, OH",
+          "s1_norm_addr": "2981 mcdonald road lancaster oh",
+          "cand_norm_addr": "2981b mcdonald rd madison twp oh",
+          "country": "united states",
+          "script": "Latin"
+        }
+      ],
+      "transliteration_partial": [
+        {
+          "s1_id": "S1-730032733",
+          "cand_id": "S2-40809558",
+          "source": "source2",
+          "s1_name": "Digital Hospitality Private Limited",
+          "cand_name": "\u0aa1\u0abf\u0a9c\u0abf\u0a9f\u0ab2 \u0ab9\u0acb\u0ab8\u0acd\u0aaa\u0abf\u0a9f\u0abe\u0ab2\u0abf\u0a9f\u0ac0 \u0aaa\u0acd\u0ab0\u0abe\u0a87\u0ab5\u0ac7\u0a9f \u0ab2\u0abf\u0aae\u0abf\u0a9f\u0ac7\u0aa1",
+          "s1_norm_name": "digital hospitality pvt ltd",
+          "cand_norm_name": "digital hospitaliti pvt ltd",
+          "s1_addr": "S-210, 211, 212 S Cube Comp, Panchot, Mehsana, Mahesana, Gujarat",
+          "cand_addr": "211, 212 S CUBE COMP, PANCHOT, S-10, MAHESANA, MEHSANA, \u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4",
+          "s1_norm_addr": "s-210 211 212 s cube comp panchot mehsana mahesana gujarat",
+          "cand_norm_addr": "211 212 s cube comp panchot s-10 mahesana mehsana gujarata",
+          "country": "india",
+          "script": "Gujarati"
+        },
+        {
+          "s1_id": "S1-465266003",
+          "cand_id": "S3-157657978",
+          "source": "source3",
+          "s1_name": "Sai Surya Infotech LLP",
+          "cand_name": "\u0938\u093e\u0908\u0902 \u0938\u0942\u0930\u094d\u092f\u093e \u0907\u0902\u092b\u094b\u091f\u0947\u0915 \u090f\u0932\u090f\u0932\u092a\u0940",
+          "s1_norm_name": "sai surya infotech llp",
+          "cand_norm_name": "saim surya infotech llp",
+          "s1_addr": "C/O Vishal Thakur P No 82, Ramai Nagar Nari Buddh Vr, Nagpur, Maharashtra",
+          "cand_addr": "C/o Vishal Thakur P No ##82, Nagpur Region, Nagpur, MH",
+          "s1_norm_addr": "c/o vishal thakur p no 82 ramai nagar nari buddh vr nagpur maharashtra",
+          "cand_norm_addr": "c/o vishal thakur p no ##82 nagpur region nagpur mh",
+          "country": "india",
+          "script": "Devanagari"
+        },
+        {
+          "s1_id": "S1-421396805",
+          "cand_id": "S2-568661178",
+          "source": "source2",
+          "s1_name": "Best Enterprises Limited",
+          "cand_name": "\u092c\u0947\u0938\u094d\u091f \u090f\u0902\u091f\u0930\u092a\u094d\u0930\u093e\u0907\u091c\u0947\u091c \u0932\u093f\u092e\u093f\u091f\u0947\u0921",
+          "s1_norm_name": "best enterprises ltd",
+          "cand_norm_name": "besta enterprises ltd",
+          "s1_addr": "202, Floor 2, Plot 1/255, B Pratiksha Tower, R S Nimkar Marg, Mumbai Central, Mumbai, Mumbai City, Maharashtra",
+          "cand_addr": "202, FLOOR 2, PLOT 1/255, B PRATIKSHA TOWER, R S NIMKAR MARG, MUMBAI CENTRAL, BOMBAY, MUMBAI CITY, Maharashtra",
+          "s1_norm_addr": "202 floor 2 plot 1/255 b pratiksha tower r s nimkar marg mumbai central mumbai mumbai city maharashtra",
+          "cand_norm_addr": "202 floor 2 plot 1/255 b pratiksha tower r s nimkar marg mumbai central bombay mumbai city maharashtra",
+          "country": "india",
+          "script": "Devanagari"
+        }
+      ],
+      "second_token_or_address_number_divergence": [
+        {
+          "s1_id": "S1-157980741",
+          "cand_id": "S3-903520241",
+          "source": "source3",
+          "s1_name": "Pediatric Dental Medicine of Westminster Inc",
+          "cand_name": "Pediatric Medicine Of Westminster Inc Center",
+          "s1_norm_name": "pediatric dental medicine of westminster inc",
+          "cand_norm_name": "pediatric medicine of westminster inc center",
+          "s1_addr": "154 Court Street, Westminster, MD",
+          "cand_addr": "154-158 Court Saint, <NULL>, Westminster, Maryland",
+          "s1_norm_addr": "154 court street westminster md",
+          "cand_norm_addr": "154-158 court saint null westminster maryland",
+          "country": "united states",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-210852470",
+          "cand_id": "S3-748797992",
+          "source": "source3",
+          "s1_name": "Danila Nauman, CPA",
+          "cand_name": "Danila CPA [Nauman,]",
+          "s1_norm_name": "danila nauman cpa",
+          "cand_norm_name": "danila cpa nauman",
+          "s1_addr": "3013 Old Raleigh Road, Apex, NC",
+          "cand_addr": "Apex, Old Raleigh Road, North Carolina",
+          "s1_norm_addr": "3013 old raleigh road apex nc",
+          "cand_norm_addr": "apex old raleigh road north carolina",
+          "country": "united states",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-995462213",
+          "cand_id": "S2-284943481",
+          "source": "source2",
+          "s1_name": "Mink Consulting Ltd",
+          "cand_name": "Mink Consulting",
+          "s1_norm_name": "mink consulting ltd",
+          "cand_norm_name": "mink consulting",
+          "s1_addr": "806 Devika Tower, 6, Nehru Place, New Delhi, South Delhi, Delhi",
+          "cand_addr": "NO 8-06 DEVIKA TOWER, 6, NEHRU PLACE, NEW DELHI, Delhi",
+          "s1_norm_addr": "806 devika tower 6 nehru place new delhi south delhi delhi",
+          "cand_norm_addr": "no 8-06 devika tower 6 nehru place new delhi delhi",
+          "country": "india",
+          "script": "Latin"
+        }
+      ],
+      "word_order_transposition": [
+        {
+          "s1_id": "S1-465559862",
+          "cand_id": "S3-17945268",
+          "source": "source3",
+          "s1_name": "Classic Wealth Solutions",
+          "cand_name": "dassic wealth solutions",
+          "s1_norm_name": "classic wealth solutions",
+          "cand_norm_name": "dassic wealth solutions",
+          "s1_addr": "1315 Juniper Street, Kannapolis, NC",
+          "cand_addr": "131 Juniper St, Kannapolis, North Carolina",
+          "s1_norm_addr": "1315 juniper street kannapolis nc",
+          "cand_norm_addr": "131 juniper st kannapolis north carolina",
+          "country": "united states",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-567048063",
+          "cand_id": "S3-212524247",
+          "source": "source3",
+          "s1_name": "Shah Impex Private Limited",
+          "cand_name": "Shah-Impex  Private Limited",
+          "s1_norm_name": "shah impex pvt ltd",
+          "cand_norm_name": "shah-impex pvt ltd",
+          "s1_addr": "3A, 3Rd Floor, Corpora, Lbs Marg, Bhandup (West), Mumbai, Mumbai City, Maharashtra",
+          "cand_addr": "Block C-2-68 3A, 3Rd Floor, Corpora, Lbs Marg, Bhandup (West), Mumbai, Mumbai City, MH",
+          "s1_norm_addr": "3a 3rd floor corpora lbs marg bhandup west mumbai mumbai city maharashtra",
+          "cand_norm_addr": "block c-2-68 3a 3rd floor corpora lbs marg bhandup west mumbai mumbai city mh",
+          "country": "india",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-370471823",
+          "cand_id": "S3-799729967",
+          "source": "source3",
+          "s1_name": "Chiropractic Optimal Associates Inc.",
+          "cand_name": "Optimal Chiropractic Inc. Associates",
+          "s1_norm_name": "chiropractic optimal associates inc",
+          "cand_norm_name": "optimal chiropractic inc associates",
+          "s1_addr": "Cleburne, Unit C, 1305 Berry Drive, TX",
+          "cand_addr": "Berry Dr, Unit C, Cleburne, Texas",
+          "s1_norm_addr": "cleburne unit c 1305 berry drive tx",
+          "cand_norm_addr": "berry dr unit c cleburne texas",
+          "country": "united states",
+          "script": "Latin"
+        }
+      ],
+      "first_token_spelling_variation": [
+        {
+          "s1_id": "S1-737722526",
+          "cand_id": "S3-16386836",
+          "source": "source3",
+          "s1_name": "Ba Construction",
+          "cand_name": "Shri Ba-Clnturtin",
+          "s1_norm_name": "ba construction",
+          "cand_norm_name": "shri ba-clnturtin",
+          "s1_addr": "Sr. No. 85/2C, 3Rd Floor, Office No. 301, Parakh Capital, Pune City, Pune, Maharashtra",
+          "cand_addr": "Sr. No. 85/2C, 3Rd Floor, Office No. 301, Parakh Capital, Pune City, Pune, \u092e\u0939\u093e\u0930\u093e\u0937\u094d\u091f\u094d\u0930",
+          "s1_norm_addr": "sr no 85/2c 3rd floor office no 301 parakh capital pune city pune maharashtra",
+          "cand_norm_addr": "sr no 85/2c 3rd floor office no 301 parakh capital pune city pune maharastra",
+          "country": "india",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-176597787",
+          "cand_id": "S2-15331552",
+          "source": "source2",
+          "s1_name": "Arena & Co",
+          "cand_name": "M/s #arena",
+          "s1_norm_name": "arena & co",
+          "cand_norm_name": "m/s #arena",
+          "s1_addr": "D-369, Anna Nagar, Thennur, Trichy-17, Tamilnadu, Tamil Nadu",
+          "cand_addr": "H.NO 389 D-369, ANNA NAGAR, THENNUR, TRICHY-17, Tamil Nadu",
+          "s1_norm_addr": "d-369 anna nagar thennur trichy-17 tamilnadu tamil nadu",
+          "cand_norm_addr": "h no 389 d-369 anna nagar thennur trichy-17 tamil nadu",
+          "country": "india",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-978693",
+          "cand_id": "S2-747089151",
+          "source": "source2",
+          "s1_name": "Rare & Partners",
+          "cand_name": "Sri RAREPARTNERS.COM",
+          "s1_norm_name": "rare & partners",
+          "cand_norm_name": "sri rarepartners com",
+          "s1_addr": "22/23B, Manohar Pukur Road, Kolkata, Howrah, West Bengal",
+          "cand_addr": "HN 981 22/23B, MANOHAR PUKUR ROAD, KOLKATA, \u09aa\u09b6\u09cd\u099a\u09bf\u09ae\u09ac\u0999\u09cd\u0997",
+          "s1_norm_addr": "22/23b manohar pukur road kolkata howrah west bengal",
+          "cand_norm_addr": "hn 981 22/23b manohar pukur road kolkata pascimavanga",
+          "country": "india",
+          "script": "Latin"
+        }
+      ],
+      "missing_address_name_typo": [
+        {
+          "s1_id": "S1-855189836",
+          "cand_id": "S3-967903866",
+          "source": "source3",
+          "s1_name": "Vanguard LLC",
+          "cand_name": "Vanguard Llc Trading",
+          "s1_norm_name": "vanguard llc",
+          "cand_norm_name": "vanguard llc trading",
+          "s1_addr": "178 Scotts Hill Road, Amherst Town, VA",
+          "cand_addr": null,
+          "s1_norm_addr": "178 scotts hill road amherst town va",
+          "cand_norm_addr": "",
+          "country": "united states",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-271523814",
+          "cand_id": "S3-414262702",
+          "source": "source3",
+          "s1_name": "Shree Foundation",
+          "cand_name": "Mr Shree Foundation Company",
+          "s1_norm_name": "shree foundation",
+          "cand_norm_name": "mr shree foundation co",
+          "s1_addr": "17-1-382/R/41B, R.T.C. Officers Colony, Champapet, Hyderabad, Telangana",
+          "cand_addr": null,
+          "s1_norm_addr": "17-1-382/r/41b r t c officers colony champapet hyderabad telangana",
+          "cand_norm_addr": "",
+          "country": "india",
+          "script": "Latin"
+        },
+        {
+          "s1_id": "S1-134120392",
+          "cand_id": "S2-57036710",
+          "source": "source2",
+          "s1_name": "Womens Health Clinic LLC",
+          "cand_name": "Womens LLC Clinic Health",
+          "s1_norm_name": "womens health clinic llc",
+          "cand_norm_name": "womens llc clinic health",
+          "s1_addr": "1624 Wexford Lane, Shakopee, MN",
+          "cand_addr": null,
+          "s1_norm_addr": "1624 wexford lane shakopee mn",
+          "cand_norm_addr": "",
+          "country": "united states",
+          "script": "Latin"
+        }
+      ],
+      "transliteration_divergence": [
+        {
+          "s1_id": "S1-446617603",
+          "cand_id": "S3-141776487",
+          "source": "source3",
+          "s1_name": "Classic Exports",
+          "cand_name": "\u0c15\u0c4d\u0c32\u0c3e\u0c38\u0c3f\u0c15\u0c4d \u0c0e\u0c15\u0c4d\u0c38\u0c4d\u200c\u0c2a\u0c4b\u0c30\u0c4d\u0c1f\u0c4d\u0c38\u0c4d",
+          "s1_norm_name": "classic exports",
+          "cand_norm_name": "klasik eks ports",
+          "s1_addr": "Plot No.401, Teachers Colony Karmanghat, Hyderabad, Telangana",
+          "cand_addr": "No 401, Hyderabad, TG",
+          "s1_norm_addr": "plot no401 teachers colony karmanghat hyderabad telangana",
+          "cand_norm_addr": "no 401 hyderabad tg",
+          "country": "india",
+          "script": "Telugu"
+        },
+        {
+          "s1_id": "S1-889148257",
+          "cand_id": "S2-58410768",
+          "source": "source2",
+          "s1_name": "Anand Infotech",
+          "cand_name": "\u0a86\u0aa3\u0a82\u0aa6 \u0a87\u0aa8\u0acd\u0aab\u0acb\u0a9f\u0ac7\u0a95",
+          "s1_norm_name": "anand infotech",
+          "cand_norm_name": "anamda inphoteka",
+          "s1_addr": "Plot No.68 To 73, 80 To 82, Prabhudarshan Ind. Est., Rayka Circle, Bamroli Road, Surat, Gujarat",
+          "cand_addr": "NO 68 TO 73, N/A, SURAT, \u0a97\u0ac1\u0a9c\u0ab0\u0abe\u0aa4",
+          "s1_norm_addr": "plot no68 to 73 80 to 82 prabhudarshan ind est rayka circle bamroli road surat gujarat",
+          "cand_norm_addr": "no 68 to 73 n/a surat gujarata",
+          "country": "india",
+          "script": "Gujarati"
+        }
+      ]
+    }
+  },
+  "india_gap_analysis": {
+    "us_both_addr_num_pct": 72.97,
+    "india_both_addr_num_pct": 51.47,
+    "key_comparison": {
+      "A": {
+        "us_recall": 0.283599161476127,
+        "india_recall": 0.25902995676575563,
+        "gap": 0.024569204710371384
+      },
+      "B": {
+        "us_recall": 0.13572895357934286,
+        "india_recall": 0.06536119663655945,
+        "gap": 0.07036775694278341
+      },
+      "C": {
+        "us_recall": 0.5783239656815016,
+        "india_recall": 0.2727054950204961,
+        "gap": 0.30561847066100545
+      },
+      "D": {
+        "us_recall": 0.47080804678889826,
+        "india_recall": 0.25745275166078785,
+        "gap": 0.2133552951281104
+      },
+      "E": {
+        "us_recall": 0.06932346289916265,
+        "india_recall": 0.22542692549911875,
+        "gap": -0.1561034625999561
+      },
+      "F": {
+        "us_recall": 0.08517530329656602,
+        "india_recall": 0.07471200319754968,
+        "gap": 0.010463300099016332
+      }
+    },
+    "india_failure_causes": {
+      "word_order_or_transposition_in_indic_names": 17,
+      "first_token_spelling_or_honorific_variance": 11,
+      "non_latin_script_transliteration_phonetic_variance": 16,
+      "unstructured_descriptive_indian_address_no_house_number": 4,
+      "missing_address": 2
+    },
+    "india_examples": [
+      {
+        "s1_name": "Shree Resorts Private Limited",
+        "cand_name": "Shri Shree-Resorts Shree-Resorts Private Ltd",
+        "s1_norm_name": "shree resorts pvt ltd",
+        "cand_norm_name": "shri shree-resorts shree-resorts pvt ltd",
+        "s1_addr": "Milkat No. 2150 Sonawane Mala, Pimpalwandi, Junnar, Pune, Maharashtra",
+        "cand_addr": "Milkat No. 2150 Sonawane Maa, Pimpalwandi, Junnar, Pune, MH",
+        "script": "Latin",
+        "cause": "word_order_or_transposition_in_indic_names"
+      },
+      {
+        "s1_name": "Bharat Investments Private Limited",
+        "cand_name": "bharatinvestments.com",
+        "s1_norm_name": "bharat investments pvt ltd",
+        "cand_norm_name": "bharatinvestments com",
+        "s1_addr": "32, Tiny Sector Guindy Industrial Estate, Chennai, Tamil Nadu",
+        "cand_addr": "8-32, Chennai, TN",
+        "script": "Latin",
+        "cause": "first_token_spelling_or_honorific_variance"
+      },
+      {
+        "s1_name": "Indian Tech Ventures Private Limited",
+        "cand_name": "\u0987\u09a8\u09cd\u09a1\u09bf\u09af\u09bc\u09be\u09a8 \u099f\u09c7\u0995 \u09ad\u09c7\u099e\u09cd\u099a\u09be\u09b0\u09b8 \u09aa\u09cd\u09b0\u09be\u0987\u09ad\u09c7\u099f \u09b2\u09bf\u09ae\u09bf\u099f\u09c7\u09a1",
+        "s1_norm_name": "indian tech ventures pvt ltd",
+        "cand_norm_name": "indiyaana tech bhencarasa pvt ltd",
+        "s1_addr": "Unit No.2Es2, 2Nd Floor, Mani Casadona, Action Area Iif 04, Street No 372, North 24 Parganas, West Bengal",
+        "cand_addr": "UNIT NO.2ES2, NORTH 24 PARGANAS, West Bengal",
+        "script": "Bengali",
+        "cause": "non_latin_script_transliteration_phonetic_variance"
+      },
+      {
+        "s1_name": "Global Producer Private Limited",
+        "cand_name": "\u0c17\u0c4d\u0c32\u0c4b\u0c2c\u0c32\u0c4d \u0c2a\u0c4d\u0c30\u0c4a\u0c21\u0c4d\u0c2f\u0c42\u0c38\u0c30\u0c4d \u0c2a\u0c4d\u0c30\u0c48\u0c35\u0c47\u0c1f\u0c4d \u0c32\u0c3f\u0c2e\u0c3f\u0c1f\u0c46\u0c21\u0c4d",
+        "s1_norm_name": "global producer pvt ltd",
+        "cand_norm_name": "global prodyusar pvt ltd",
+        "s1_addr": "01St Floor, 1-57/128/A, Sy. No. 31 & 32, Sn Reddy, Tirumalagiri, Hyderabad, Telangana",
+        "cand_addr": "Door No 01St Floor, 1-57/128/A, Sy. No. 31 & 32, Sn Reddy, Hyderabad, Tirumalagiri, TG",
+        "script": "Telugu",
+        "cause": "non_latin_script_transliteration_phonetic_variance"
+      },
+      {
+        "s1_name": "Exemplar Group Group",
+        "cand_name": "Smt Exmrepar Group Group",
+        "s1_norm_name": "exemplar group group",
+        "cand_norm_name": "smt exmrepar group group",
+        "s1_addr": "C/O Animon A V Ayuvalappil House Janathappadi Nilambur Panchayath, Nilambur, Malappuram, Malapuram, Kerala",
+        "cand_addr": "HN 432 C/O ANIMON A V AYUVALAPPIL HOUSE JANATHAPPADI NILAMBUR PANCHAYATH, NILAMBUR, MALAPPURAM, MALAPURAM, Kerala",
+        "script": "Latin",
+        "cause": "unstructured_descriptive_indian_address_no_house_number"
+      },
+      {
+        "s1_name": "Media Nachiyar Agro Private Limited",
+        "cand_name": "MEDIA NACHIFAYR AGRO  PRIVATE LIMITED",
+        "s1_norm_name": "media nachiyar agro pvt ltd",
+        "cand_norm_name": "media nachifayr agro pvt ltd",
+        "s1_addr": "P-47, Shyamacharan Smrititirtha Road, New Alipore, Kolkata, Kolkata, Howrah, West Bengal",
+        "cand_addr": "#419 P-47, SHYAMACHARAN SMRITITIRTHA ROAD, NEW ALIPORE, KOLKATA, KOLKATA, \u09aa\u09b6\u09cd\u099a\u09bf\u09ae\u09ac\u0999\u09cd\u0997",
+        "script": "Latin",
+        "cause": "word_order_or_transposition_in_indic_names"
+      },
+      {
+        "s1_name": "Supreme Consulting LLP",
+        "cand_name": "Supreme LLP Consulting",
+        "s1_norm_name": "supreme consulting llp",
+        "cand_norm_name": "supreme llp consulting",
+        "s1_addr": "C/O Vinod Kumar Sharma, Bhilora Nausar, Sader, Gorakhpur, Uttar Pradesh",
+        "cand_addr": "NULL, \u0909\u0924\u094d\u0924\u0930 \u092a\u094d\u0930\u0926\u0947\u0936, Sader, C/o Vinod Kumar Shadma",
+        "script": "Latin",
+        "cause": "unstructured_descriptive_indian_address_no_house_number"
+      },
+      {
+        "s1_name": "White Management Private Limited",
+        "cand_name": "\u0935\u094d\u0939\u093e\u0907\u091f \u092e\u0948\u0928\u0947\u091c\u092e\u0947\u0902\u091f \u092a\u094d\u0930\u093e\u0907\u0935\u0947\u091f \u0932\u093f\u092e\u093f\u091f\u0947\u0921",
+        "s1_norm_name": "white management pvt ltd",
+        "cand_norm_name": "vhaita management pvt ltd",
+        "s1_addr": "Ahamednagar, F-66 Midc Area, Ahmednagar, Maharashtra",
+        "cand_addr": "F-66 Midc Area, Ahmednagar, Ahamednagar, MH",
+        "script": "Devanagari",
+        "cause": "non_latin_script_transliteration_phonetic_variance"
+      },
+      {
+        "s1_name": "Gold It Limited",
+        "cand_name": "Goldit.Com",
+        "s1_norm_name": "gold it ltd",
+        "cand_norm_name": "goldit com",
+        "s1_addr": "Punyam Bungalow, Plot No.8A, Gangadham Bungalow Society, Phase 1, Market Yard, Pune, Maharashtra",
+        "cand_addr": "Puynam Bungalow, Pune, MH",
+        "script": "Latin",
+        "cause": "unstructured_descriptive_indian_address_no_house_number"
+      },
+      {
+        "s1_name": "Premier Impex Private Limited",
+        "cand_name": "Smt Premier Impex Private  Limited",
+        "s1_norm_name": "premier impex pvt ltd",
+        "cand_norm_name": "smt premier impex pvt ltd",
+        "s1_addr": "56, Kaveri Vatika Nagla Tikona, Aligarh, Uttar Pradesh",
+        "cand_addr": "B3/56, Aligarh, \u0909\u0924\u094d\u0924\u0930 \u092a\u094d\u0930\u0926\u0947\u0936",
+        "script": "Latin",
+        "cause": "word_order_or_transposition_in_indic_names"
+      }
+    ]
+  },
+  "block_size_semantics": {
+    "definition": "candidate_pairs_per_block",
+    "formula": "len(s1_entities_in_block) * len(cand_entities_in_block)",
+    "consistency_verified": true,
+    "rationale": "Directly bounds the quadratic candidate explosion across disjoint bipartite sources."
+  },
+  "elapsed_seconds": 355.09
+}

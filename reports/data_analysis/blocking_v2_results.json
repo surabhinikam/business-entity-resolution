@@ -1,0 +1,612 @@
+{
+  "ground_truth": {
+    "total_pairs": 7638365,
+    "s1_to_s2_pairs": 3693619,
+    "s1_to_s3_pairs": 3944746
+  },
+  "data_stats": {
+    "s1_entities": 2206821,
+    "candidate_entities": 10320219,
+    "total_possible_pairs": 22774876013799,
+    "singleton_s1_entities": 123247
+  },
+  "individual_keys": {
+    "A": {
+      "key_label": "A",
+      "key_name": "Country + Exact Normalized Name",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 2091056,
+        "recall": 0.273757,
+        "candidate_pairs": 29040950,
+        "common_blocks": 992875,
+        "max_block_size": 84663,
+        "reduction_ratio": 0.99999872,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 1014674,
+          "recall": 0.27471
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 1076382,
+          "recall": 0.272865
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.272312
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.276365
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 1298465,
+          "recall": 0.283599
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 792591,
+          "recall": 0.25903
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 2206821,
+        "s1_total": 2206821,
+        "coverage_pct": 100.0
+      }
+    },
+    "B": {
+      "key_label": "B",
+      "key_name": "Country + Exact Transliterated Name",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 821433,
+        "recall": 0.10754,
+        "candidate_pairs": 12330485,
+        "common_blocks": 562857,
+        "max_block_size": 66612,
+        "reduction_ratio": 0.99999946,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 407490,
+          "recall": 0.110323
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 413943,
+          "recall": 0.104935
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.112163
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.099195
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 621438,
+          "recall": 0.135729
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 199995,
+          "recall": 0.065361
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 2206821,
+        "s1_total": 2206821,
+        "coverage_pct": 100.0
+      }
+    },
+    "C": {
+      "key_label": "C",
+      "key_name": "Country + First Two Meaningful Tokens",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 3482305,
+        "recall": 0.455897,
+        "candidate_pairs": 873166573,
+        "common_blocks": 807765,
+        "max_block_size": 96818904,
+        "reduction_ratio": 0.99996166,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 1741919,
+          "recall": 0.471602
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 1740386,
+          "recall": 0.441191
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.473307
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.424462
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 2647869,
+          "recall": 0.578324
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 834436,
+          "recall": 0.272705
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 1564299,
+        "s1_total": 2206821,
+        "coverage_pct": 70.885
+      }
+    },
+    "D": {
+      "key_label": "D",
+      "key_name": "Country + First Meaningful Token + Address Number",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 2943370,
+        "recall": 0.38534,
+        "candidate_pairs": 10548647,
+        "common_blocks": 1118638,
+        "max_block_size": 42750,
+        "reduction_ratio": 0.99999954,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 1447604,
+          "recall": 0.39192
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 1495766,
+          "recall": 0.379179
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.598761
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.0
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 2155605,
+          "recall": 0.470808
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 787765,
+          "recall": 0.257453
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 1686612,
+        "s1_total": 2206821,
+        "coverage_pct": 76.427
+      }
+    },
+    "E": {
+      "key_label": "E",
+      "key_name": "Country + First Meaningful Token (no addr num fallback)",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 1007170,
+        "recall": 0.131857,
+        "candidate_pairs": 757615515,
+        "common_blocks": 59940,
+        "max_block_size": 46217189,
+        "reduction_ratio": 0.99996673,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 484990,
+          "recall": 0.131305
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 522180,
+          "recall": 0.132374
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.0
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.369929
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 317399,
+          "recall": 0.069323
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 689771,
+          "recall": 0.225427
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 471960,
+        "s1_total": 2206821,
+        "coverage_pct": 21.386
+      }
+    },
+    "F": {
+      "key_label": "F",
+      "key_name": "Country + Exact Normalized Address",
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 618584,
+        "recall": 0.080984,
+        "candidate_pairs": 753988,
+        "common_blocks": 477825,
+        "max_block_size": 240,
+        "reduction_ratio": 0.99999997,
+        "oversized_blocks": 0
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "gt_pairs": 3693619,
+          "recovered": 444629,
+          "recall": 0.120378
+        },
+        "s1_to_s3": {
+          "gt_pairs": 3944746,
+          "recovered": 173955,
+          "recall": 0.044098
+        }
+      },
+      "by_address_number": {
+        "both_have_addr_num": {
+          "gt_pairs": 4915765,
+          "recall": 0.09748
+        },
+        "missing_addr_num": {
+          "gt_pairs": 2722600,
+          "recall": 0.051199
+        }
+      },
+      "by_country": {
+        "united states": {
+          "gt_pairs": 4578522,
+          "recovered": 389977,
+          "recall": 0.085175
+        },
+        "india": {
+          "gt_pairs": 3059843,
+          "recovered": 228607,
+          "recall": 0.074712
+        }
+      },
+      "s1_coverage": {
+        "s1_with_keys": 2206821,
+        "s1_total": 2206821,
+        "coverage_pct": 100.0
+      }
+    }
+  },
+  "incremental": [
+    {
+      "keys": "A",
+      "key_labels": [
+        "A"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 2091056,
+        "recall": 0.273757,
+        "candidate_pairs": 29040950,
+        "common_blocks": 992875,
+        "max_block_size": 84663,
+        "reduction_ratio": 0.99999872
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 1014674,
+          "recall": 0.27471
+        },
+        "s1_to_s3": {
+          "recovered": 1076382,
+          "recall": 0.272865
+        }
+      },
+      "eval_time_seconds": 0.04
+    },
+    {
+      "keys": "A+B",
+      "key_labels": [
+        "A",
+        "B"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 2091056,
+        "recall": 0.273757,
+        "candidate_pairs": 41371435,
+        "common_blocks": 1555732,
+        "max_block_size": 84663,
+        "reduction_ratio": 0.99999818
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 1014674,
+          "recall": 0.27471
+        },
+        "s1_to_s3": {
+          "recovered": 1076382,
+          "recall": 0.272865
+        }
+      },
+      "eval_time_seconds": 0.01
+    },
+    {
+      "keys": "A+B+C",
+      "key_labels": [
+        "A",
+        "B",
+        "C"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 4089237,
+        "recall": 0.535355,
+        "candidate_pairs": 914538008,
+        "common_blocks": 2363497,
+        "max_block_size": 96818904,
+        "reduction_ratio": 0.99995984
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 2032365,
+          "recall": 0.550237
+        },
+        "s1_to_s3": {
+          "recovered": 2056872,
+          "recall": 0.521421
+        }
+      },
+      "eval_time_seconds": 0.01
+    },
+    {
+      "keys": "A+B+C+D",
+      "key_labels": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 4949643,
+        "recall": 0.647998,
+        "candidate_pairs": 925086655,
+        "common_blocks": 3482135,
+        "max_block_size": 96818904,
+        "reduction_ratio": 0.99995938
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 2440077,
+          "recall": 0.66062
+        },
+        "s1_to_s3": {
+          "recovered": 2509566,
+          "recall": 0.636179
+        }
+      },
+      "eval_time_seconds": 0.01
+    },
+    {
+      "keys": "A+B+C+D+E",
+      "key_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 5315723,
+        "recall": 0.695924,
+        "candidate_pairs": 1682702170,
+        "common_blocks": 3542075,
+        "max_block_size": 96818904,
+        "reduction_ratio": 0.99992612
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 2609959,
+          "recall": 0.706613
+        },
+        "s1_to_s3": {
+          "recovered": 2705764,
+          "recall": 0.685916
+        }
+      },
+      "eval_time_seconds": 0.01
+    },
+    {
+      "keys": "A+B+C+D+E+F",
+      "key_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "overall": {
+        "gt_pairs": 7638365,
+        "recovered": 5558149,
+        "recall": 0.727662,
+        "candidate_pairs": 1683456158,
+        "common_blocks": 4019900,
+        "max_block_size": 96818904,
+        "reduction_ratio": 0.99992608
+      },
+      "by_source": {
+        "s1_to_s2": {
+          "recovered": 2710328,
+          "recall": 0.733787
+        },
+        "s1_to_s3": {
+          "recovered": 2847821,
+          "recall": 0.721928
+        }
+      },
+      "eval_time_seconds": 0.01
+    }
+  ],
+  "block_size_experiments": [
+    {
+      "cap": "none",
+      "recall": 0.727662,
+      "recovered": 5558149,
+      "candidate_pairs": 1683456158,
+      "common_blocks": 4019900,
+      "oversized_blocks": 0,
+      "recall_lost_pct": 0.0,
+      "reduction_ratio": 0.99992608
+    },
+    {
+      "cap": 100,
+      "recall": 0.608432,
+      "recovered": 4647424,
+      "candidate_pairs": 17391124,
+      "common_blocks": 3939581,
+      "oversized_blocks": 80319,
+      "recall_lost_vs_uncapped": 0.11923,
+      "recall_lost_pct": 16.385,
+      "reduction_ratio": 0.99999924,
+      "eval_time_seconds": 9.26
+    },
+    {
+      "cap": 500,
+      "recall": 0.643896,
+      "recovered": 4918310,
+      "candidate_pairs": 28213600,
+      "common_blocks": 3991180,
+      "oversized_blocks": 28720,
+      "recall_lost_vs_uncapped": 0.083766,
+      "recall_lost_pct": 11.512,
+      "reduction_ratio": 0.99999876,
+      "eval_time_seconds": 2.46
+    },
+    {
+      "cap": 1000,
+      "recall": 0.656032,
+      "recovered": 5011009,
+      "candidate_pairs": 35395049,
+      "common_blocks": 4001147,
+      "oversized_blocks": 18753,
+      "recall_lost_vs_uncapped": 0.071631,
+      "recall_lost_pct": 9.844,
+      "reduction_ratio": 0.99999845,
+      "eval_time_seconds": 2.07
+    },
+    {
+      "cap": 5000,
+      "recall": 0.685991,
+      "recovered": 5239847,
+      "candidate_pairs": 64248496,
+      "common_blocks": 4015231,
+      "oversized_blocks": 4669,
+      "recall_lost_vs_uncapped": 0.041671,
+      "recall_lost_pct": 5.727,
+      "reduction_ratio": 0.99999718,
+      "eval_time_seconds": 1.64
+    },
+    {
+      "cap": 10000,
+      "recall": 0.692426,
+      "recovered": 5289004,
+      "candidate_pairs": 78365762,
+      "common_blocks": 4017250,
+      "oversized_blocks": 2650,
+      "recall_lost_vs_uncapped": 0.035236,
+      "recall_lost_pct": 4.842,
+      "reduction_ratio": 0.99999656,
+      "eval_time_seconds": 1.63
+    },
+    {
+      "cap": 50000,
+      "recall": 0.702301,
+      "recovered": 5364435,
+      "candidate_pairs": 118071238,
+      "common_blocks": 4019359,
+      "oversized_blocks": 541,
+      "recall_lost_vs_uncapped": 0.025361,
+      "recall_lost_pct": 3.485,
+      "reduction_ratio": 0.99999482,
+      "eval_time_seconds": 1.14
+    }
+  ],
+  "coverage_analysis": {
+    "pair_coverage_distribution": {
+      "0": 2080216,
+      "1": 2151311,
+      "2": 1920406,
+      "3": 1012587,
+      "4": 435191,
+      "5": 38654,
+      "6": 0
+    },
+    "key_exclusive_pairs": {
+      "A": 150583,
+      "B": 0,
+      "C": 657412,
+      "D": 765316,
+      "E": 335574,
+      "F": 242426
+    },
+    "uncovered_pairs": 2080216,
+    "uncovered_pct": 27.234
+  },
+  "total_eval_time_seconds": 227.96
+}
