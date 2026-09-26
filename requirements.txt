@@ -11,6 +11,7 @@ indic-transliteration
 
 # Machine Learning & Evaluation
 scikit-learn
+lightgbm
 scipy
 
 # Utilities & Configuration

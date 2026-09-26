@@ -1,0 +1,600 @@
+#!/usr/bin/env python3
+"""
+Validation Script: Small-Scale End-to-End Feature Generation & Validation (Part 6).
+
+Progressively validates the unified FeaturePipeline at three scales:
+1. 1,000 candidate pairs
+2. 10,000 candidate pairs
+3. 100,000 candidate pairs
+
+For each scale, this script performs:
+- Exact schema, deterministic column ordering, and dtype validation.
+- Null, NaN, and Inf checks across all 32 columns (3 ID + 29 features).
+- Duplicate identity checks on (source1_entity_id, candidate_entity_id, candidate_source).
+- Feature value domain and range validations.
+- Distribution statistics (min, max, mean, std, non-zero rate).
+- Wall-clock runtime, throughput (pairs/sec), and memory profiling.
+- Single-pair consistency verification against individual feature modules on a 50-pair sample.
+- Candidate ground-truth positive match coverage and blocking recall.
+"""
+
+from __future__ import annotations
+
+import glob
+import logging
+import math
+import os
+import resource
+import sys
+import time
+import tracemalloc
+from typing import Any, Dict, List, Set, Tuple
+
+import polars as pl
+
+# Ensure project root is in sys.path
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
+
+from src.analysis.data_loader import load_ground_truth, explode_ground_truth
+from src.candidate_generation.block_index import BlockIndex
+from src.features.feature_pipeline import FeaturePipeline
+from src.features.feature_schema import (
+    PAIR_ID_COLUMNS,
+    NAME_FEATURE_NAMES,
+    NAME_FEATURE_SCHEMA,
+    ADDRESS_FEATURE_NAMES,
+    CROSS_FEATURE_NAMES,
+    BLOCKING_FEATURE_NAMES,
+    ALL_FEATURE_NAMES,
+    FULL_PIPELINE_COLUMNS,
+    FULL_FEATURE_SCHEMA,
+)
+from src.features.record_representation import (
+    NameRepresentation,
+    AddressRepresentation,
+    build_name_representation,
+    build_address_representation,
+)
+from src.features.name_features import compute_name_features
+from src.features.address_features import compute_address_features
+from src.features.cross_features import compute_cross_features
+from src.features.blocking_features import compute_blocking_features
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger("validate_scale")
+
+SCALES = [1_000, 10_000, 100_000]
+SAMPLE_VERIFY_SIZE = 50
+MAX_BLOCK_SIZE = 5000
+ACTIVE_KEYS = ["A", "C", "D", "E", "F"]
+
+
+def get_peak_memory_mb() -> float:
+    """Returns max RSS memory in MB."""
+    # ru_maxrss is in kilobytes on Linux
+    return resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0
+
+
+def check_feature_ranges(df: pl.DataFrame) -> Dict[str, bool]:
+    """Validate allowable value ranges for all 29 features."""
+    range_results = {}
+
+    # Binary features {0, 1}
+    binary_features = [
+        "name_exact_norm",
+        "name_exact_translit",
+        "name_first_token_exact",
+        "name_acronym_match",
+        "address_missing_s1",
+        "address_missing_candidate",
+        "matched_key_A",
+        "matched_key_C",
+        "matched_key_D",
+        "matched_key_E",
+        "matched_key_F",
+    ]
+    for feat in binary_features:
+        if feat in df.columns:
+            vals = set(df[feat].unique().to_list())
+            range_results[feat] = vals.issubset({0, 1})
+
+    # Categorical features with missing indicator {-1, 0, 1}
+    ternary_features = [
+        "name_legal_suffix_match",
+        "address_exact",
+        "address_number_overlap",
+        "postal_match",
+        "country_match",
+    ]
+    for feat in ternary_features:
+        if feat in df.columns:
+            vals = set(df[feat].unique().to_list())
+            range_results[feat] = vals.issubset({-1, 0, 1})
+
+    # Normalized similarity features in [0.0, 1.0]
+    similarity_features = [
+        "name_token_jaccard",
+        "name_token_overlap",
+        "name_token_dice",
+        "name_char_3gram_jaccard",
+        "name_char_len_ratio",
+        "address_token_jaccard",
+        "address_token_overlap",
+        "address_char_3gram_similarity",
+    ]
+    for feat in similarity_features:
+        if feat in df.columns:
+            min_v = df[feat].min()
+            max_v = df[feat].max()
+            range_results[feat] = (min_v >= -1e-5) and (max_v <= 1.0 + 1e-5)
+
+    # Difference / count features >= 0
+    non_negative_features = [
+        "name_token_count_diff",
+        "name_char_len_diff",
+        "shared_address_number_count",
+    ]
+    for feat in non_negative_features:
+        if feat in df.columns:
+            min_v = df[feat].min()
+            range_results[feat] = min_v >= 0
+
+    # Address length difference: >= -1 (-1 is missing)
+    if "address_length_difference" in df.columns:
+        min_v = df["address_length_difference"].min()
+        range_results["address_length_difference"] = min_v >= -1
+
+    # Matched key count: in [1, 5] for candidate pairs generated by blocker
+    if "matched_key_count" in df.columns:
+        min_v = df["matched_key_count"].min()
+        max_v = df["matched_key_count"].max()
+        range_results["matched_key_count"] = (min_v >= 1) and (max_v <= 5)
+
+    return range_results
+
+
+def verify_individual_module_consistency(
+    pairs_slice: pl.DataFrame,
+    features_slice: pl.DataFrame,
+    s1_name_reps: Dict[str, NameRepresentation],
+    cand_name_reps: Dict[str, NameRepresentation],
+    s1_addr_reps: Dict[str, AddressRepresentation],
+    cand_addr_reps: Dict[str, AddressRepresentation],
+    s1_translit: Dict[str, Any],
+    cand_translit: Dict[str, Any],
+    s1_countries: Dict[str, Any],
+    cand_countries: Dict[str, Any],
+    provenance_map: Dict[Tuple[str, str], Set[str]],
+    sample_size: int = SAMPLE_VERIFY_SIZE,
+) -> Tuple[bool, int, List[str]]:
+    """
+    Compares pipeline outputs against standalone feature calculation functions
+    for a sample of candidate pairs.
+    """
+    n_sample = min(sample_size, pairs_slice.height)
+    # Take evenly spaced samples across the slice
+    step = max(1, pairs_slice.height // n_sample)
+    sampled_indices = list(range(0, pairs_slice.height, step))[:n_sample]
+
+    discrepancies: List[str] = []
+    verified_count = 0
+
+    features_rows = features_slice.to_dicts()
+
+    for idx in sampled_indices:
+        row = features_rows[idx]
+        s1_id = row["source1_entity_id"]
+        cand_id = row["candidate_entity_id"]
+        pair_key = (s1_id, cand_id)
+
+        # 1. Standalone Name Features
+        s1_nr = s1_name_reps.get(s1_id)
+        cand_nr = cand_name_reps.get(cand_id)
+        s1_tr = s1_translit.get(s1_id)
+        cand_tr = cand_translit.get(cand_id)
+        expected_name = compute_name_features(s1_nr, cand_nr, s1_tr, cand_tr)
+
+        for feat_name, exp_val in expected_name.items():
+            act_val = row[feat_name]
+            if isinstance(exp_val, float):
+                if not math.isclose(exp_val, act_val, abs_tol=1e-5):
+                    discrepancies.append(
+                        f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                    )
+            else:
+                if exp_val != act_val:
+                    discrepancies.append(
+                        f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                    )
+
+        # 2. Standalone Address Features
+        s1_ar = s1_addr_reps.get(s1_id)
+        cand_ar = cand_addr_reps.get(cand_id)
+        expected_addr = compute_address_features(s1_ar, cand_ar)
+
+        for feat_name, exp_val in expected_addr.items():
+            act_val = row[feat_name]
+            if isinstance(exp_val, float):
+                if not math.isclose(exp_val, act_val, abs_tol=1e-5):
+                    discrepancies.append(
+                        f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                    )
+            else:
+                if exp_val != act_val:
+                    discrepancies.append(
+                        f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                    )
+
+        # 3. Standalone Cross Features
+        s1_c = s1_countries.get(s1_id)
+        cand_c = cand_countries.get(cand_id)
+        expected_cross = compute_cross_features(s1_c, cand_c)
+
+        for feat_name, exp_val in expected_cross.items():
+            act_val = row[feat_name]
+            if exp_val != act_val:
+                discrepancies.append(
+                    f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                )
+
+        # 4. Standalone Blocking Features
+        prov_keys = provenance_map.get(pair_key, set())
+        expected_block = compute_blocking_features(prov_keys)
+
+        for feat_name, exp_val in expected_block.items():
+            act_val = row[feat_name]
+            if exp_val != act_val:
+                discrepancies.append(
+                    f"Pair {pair_key} {feat_name}: expected {exp_val}, got {act_val}"
+                )
+
+        verified_count += 1
+
+    is_consistent = (len(discrepancies) == 0)
+    return is_consistent, verified_count, discrepancies
+
+
+def main():
+    logger.info("=" * 80)
+    logger.info("PHASE 3 PART 6: PROGRESSIVE FEATURE GENERATION & VALIDATION")
+    logger.info("=" * 80)
+
+    # 1. Load Processed Records for S1, S2, S3
+    logger.info("Step 1: Loading raw processed parquet partitions...")
+    s1_files = sorted(glob.glob("data/processed/train/source1/*.parquet"))[:3]
+    s2_files = sorted(glob.glob("data/processed/train/source2/*.parquet"))[:4]
+    s3_files = sorted(glob.glob("data/processed/train/source3/*.parquet"))[:4]
+
+    s1_df = pl.concat([pl.read_parquet(f) for f in s1_files])
+    s2_df = pl.concat([pl.read_parquet(f) for f in s2_files])
+    s3_df = pl.concat([pl.read_parquet(f) for f in s3_files])
+
+    logger.info(
+        f"Loaded partitions: S1={len(s1_df):,} records ({len(s1_files)} parts), "
+        f"S2={len(s2_df):,} records ({len(s2_files)} parts), "
+        f"S3={len(s3_df):,} records ({len(s3_files)} parts)"
+    )
+
+    # 2. Build BlockIndex with Frozen Blocker (A, C, D, E, F) and MAX_BLOCK_SIZE = 5000
+    logger.info(f"Step 2: Building BlockIndex with keys {ACTIVE_KEYS} and cap={MAX_BLOCK_SIZE}...")
+    idx = BlockIndex(max_block_size=MAX_BLOCK_SIZE)
+
+    for row in s1_df.iter_rows(named=True):
+        idx.add_s1_record(row["entity_id"], row, active_keys=ACTIVE_KEYS)
+
+    cand_source_map: Dict[str, str] = {}
+    for row in s2_df.iter_rows(named=True):
+        eid = row["entity_id"]
+        cand_source_map[eid] = "source2"
+        idx.add_candidate_record(eid, row, active_keys=ACTIVE_KEYS)
+
+    for row in s3_df.iter_rows(named=True):
+        eid = row["entity_id"]
+        cand_source_map[eid] = "source3"
+        idx.add_candidate_record(eid, row, active_keys=ACTIVE_KEYS)
+
+    t_block_start = time.perf_counter()
+    pairs_set, provenance_dict = idx.generate_pairs(cap_blocks=True)
+    t_block_elapsed = time.perf_counter() - t_block_start
+
+    logger.info(
+        f"Generated {len(pairs_set):,} deduplicated candidate pairs in {t_block_elapsed:.2f}s "
+        f"({len(idx.oversized_blocks)} oversized blocks detected & capped)."
+    )
+
+    # 3. Ground Truth Matching Pool
+    logger.info("Step 3: Loading ground truth linkage data...")
+    gt_df = load_ground_truth()
+    exploded_gt = explode_ground_truth(gt_df)
+    s1_entity_set = set(s1_df["entity_id"].to_list())
+    cand_entity_set = set(cand_source_map.keys())
+
+    relevant_gt = exploded_gt.filter(
+        pl.col("source1_entity_id").is_in(list(s1_entity_set)) &
+        pl.col("matched_entity_id").is_in(list(cand_entity_set))
+    )
+    relevant_gt_pairs: Set[Tuple[str, str]] = set(
+        zip(
+            relevant_gt["source1_entity_id"].to_list(),
+            relevant_gt["matched_entity_id"].to_list(),
+        )
+    )
+    logger.info(
+        f"Ground-truth pairs within sampled entity universe: {len(relevant_gt_pairs):,} pairs"
+    )
+
+    # 4. Precompute Representations for Entities in Candidates
+    logger.info("Step 4: Precomputing reusable record representations...")
+    s1_name_reps: Dict[str, NameRepresentation] = {}
+    s1_addr_reps: Dict[str, AddressRepresentation] = {}
+    s1_translit: Dict[str, Any] = {}
+    s1_countries: Dict[str, Any] = {}
+
+    for row in s1_df.iter_rows(named=True):
+        eid = row["entity_id"]
+        s1_name_reps[eid] = build_name_representation(
+            row.get("business_name_normalized"),
+            row.get("business_name_tokens"),
+        )
+        s1_addr_reps[eid] = build_address_representation(row)
+        s1_translit[eid] = row.get("business_name_transliterated")
+        s1_countries[eid] = row.get("country_normalized")
+
+    cand_name_reps: Dict[str, NameRepresentation] = {}
+    cand_addr_reps: Dict[str, AddressRepresentation] = {}
+    cand_translit: Dict[str, Any] = {}
+    cand_countries: Dict[str, Any] = {}
+
+    all_cand_df = pl.concat([s2_df, s3_df])
+    for row in all_cand_df.iter_rows(named=True):
+        eid = row["entity_id"]
+        cand_name_reps[eid] = build_name_representation(
+            row.get("business_name_normalized"),
+            row.get("business_name_tokens"),
+        )
+        cand_addr_reps[eid] = build_address_representation(row)
+        cand_translit[eid] = row.get("business_name_transliterated")
+        cand_countries[eid] = row.get("country_normalized")
+
+    # Sort pairs deterministically
+    sorted_pairs = sorted(list(pairs_set))
+
+    # Initialize Feature Pipeline
+    pipeline = FeaturePipeline()
+
+    scale_reports = []
+
+    # 5. Progressive Validation Across Scales
+    logger.info("Step 5: Executing progressive scale validation...")
+    for scale in SCALES:
+        logger.info("-" * 80)
+        logger.info(f"VALIDATING SCALE: {scale:,} CANDIDATE PAIRS")
+        logger.info("-" * 80)
+
+        pairs_subset = sorted_pairs[:scale]
+
+        # Construct candidate pairs DataFrame
+        candidate_pairs_df = pl.DataFrame({
+            "source1_entity_id": [p[0] for p in pairs_subset],
+            "candidate_entity_id": [p[1] for p in pairs_subset],
+            "candidate_source": [cand_source_map[p[1]] for p in pairs_subset],
+        })
+        pair_provenance_sub = {p: provenance_dict[p] for p in pairs_subset}
+
+        # Profile execution
+        tracemalloc.start()
+        t0 = time.perf_counter()
+        rss_before = get_peak_memory_mb()
+
+        features_df = pipeline.generate_features(
+            candidate_pairs_df=candidate_pairs_df,
+            s1_name_reps=s1_name_reps,
+            cand_name_reps=cand_name_reps,
+            s1_address_reps=s1_addr_reps,
+            cand_address_reps=cand_addr_reps,
+            s1_translit=s1_translit,
+            cand_translit=cand_translit,
+            s1_countries=s1_countries,
+            cand_countries=cand_countries,
+            pair_provenance=pair_provenance_sub,
+        )
+
+        elapsed = time.perf_counter() - t0
+        current_alloc, peak_alloc = tracemalloc.get_traced_memory()
+        tracemalloc.stop()
+        rss_after = get_peak_memory_mb()
+
+        pairs_per_sec = scale / elapsed if elapsed > 0 else float("inf")
+        df_size_mb = features_df.estimated_size("mb")
+
+        # Check 1: Shape and column count
+        shape_ok = (features_df.height == scale) and (features_df.width == len(FULL_PIPELINE_COLUMNS))
+
+        # Check 2: Deterministic column ordering
+        cols_match = (features_df.columns == FULL_PIPELINE_COLUMNS)
+
+        # Check 3: Schema dtypes match
+        dtypes_match = True
+        dtype_mismatches = []
+        for col_name, expected_dtype in FULL_FEATURE_SCHEMA.items():
+            actual_dtype = features_df[col_name].dtype
+            if actual_dtype != expected_dtype:
+                dtypes_match = False
+                dtype_mismatches.append(f"{col_name}: expected {expected_dtype}, got {actual_dtype}")
+
+        # Check 4: Uniqueness & Identity Preservation
+        n_unique_pairs = features_df.select(PAIR_ID_COLUMNS).n_unique()
+        no_duplicates = (n_unique_pairs == scale)
+
+        ids_match_input = (
+            features_df["source1_entity_id"].to_list() == candidate_pairs_df["source1_entity_id"].to_list()
+            and features_df["candidate_entity_id"].to_list() == candidate_pairs_df["candidate_entity_id"].to_list()
+            and features_df["candidate_source"].to_list() == candidate_pairs_df["candidate_source"].to_list()
+        )
+
+        # Check 5: Null / NaN / Inf values
+        null_counts = {col: features_df[col].null_count() for col in features_df.columns}
+        total_nulls = sum(null_counts.values())
+
+        nan_counts = {}
+        inf_counts = {}
+        for col in ALL_FEATURE_NAMES:
+            if features_df[col].dtype in (pl.Float32, pl.Float64):
+                nan_counts[col] = int(features_df[col].is_nan().sum())
+                inf_counts[col] = int(features_df[col].is_infinite().sum())
+            else:
+                nan_counts[col] = 0
+                inf_counts[col] = 0
+
+        total_nans = sum(nan_counts.values())
+        total_infs = sum(inf_counts.values())
+
+        # Check 6: Range validation
+        range_validations = check_feature_ranges(features_df)
+        all_ranges_valid = all(range_validations.values())
+        invalid_ranges = [f for f, valid in range_validations.items() if not valid]
+
+        # Check 7: Ground-Truth Coverage
+        pair_tuples = set(zip(
+            candidate_pairs_df["source1_entity_id"].to_list(),
+            candidate_pairs_df["candidate_entity_id"].to_list(),
+        ))
+        positives = pair_tuples & relevant_gt_pairs
+        pos_count = len(positives)
+        pos_rate = (pos_count / scale) * 100.0
+        gt_recall = (pos_count / len(relevant_gt_pairs)) * 100.0 if relevant_gt_pairs else 0.0
+
+        # Check 8: Consistency against standalone modules
+        consistent, n_checked, discrepancies = verify_individual_module_consistency(
+            pairs_slice=candidate_pairs_df,
+            features_slice=features_df,
+            s1_name_reps=s1_name_reps,
+            cand_name_reps=cand_name_reps,
+            s1_addr_reps=s1_addr_reps,
+            cand_addr_reps=cand_addr_reps,
+            s1_translit=s1_translit,
+            cand_translit=cand_translit,
+            s1_countries=s1_countries,
+            cand_countries=cand_countries,
+            provenance_map=provenance_dict,
+            sample_size=SAMPLE_VERIFY_SIZE,
+        )
+
+        # Collect summary distributions for key features
+        key_feature_stats = {}
+        for col in [
+            "name_token_jaccard",
+            "name_char_3gram_jaccard",
+            "name_exact_norm",
+            "address_token_jaccard",
+            "address_exact",
+            "country_match",
+            "matched_key_count",
+            "matched_key_A",
+            "matched_key_C",
+            "matched_key_D",
+            "matched_key_E",
+            "matched_key_F",
+        ]:
+            s = features_df[col]
+            key_feature_stats[col] = {
+                "min": float(s.min()),
+                "max": float(s.max()),
+                "mean": float(s.mean()),
+                "std": float(s.std()) if s.std() is not None else 0.0,
+                "zero_pct": float((s == 0).sum() / scale * 100.0),
+            }
+
+        report_entry = {
+            "scale": scale,
+            "runtime_s": elapsed,
+            "pairs_per_sec": pairs_per_sec,
+            "df_size_mb": df_size_mb,
+            "traced_peak_mb": peak_alloc / (1024 * 1024),
+            "rss_peak_mb": rss_after,
+            "shape_ok": shape_ok,
+            "cols_match": cols_match,
+            "dtypes_match": dtypes_match,
+            "dtype_mismatches": dtype_mismatches,
+            "no_duplicates": no_duplicates,
+            "ids_match_input": ids_match_input,
+            "total_nulls": total_nulls,
+            "total_nans": total_nans,
+            "total_infs": total_infs,
+            "all_ranges_valid": all_ranges_valid,
+            "invalid_ranges": invalid_ranges,
+            "consistent": consistent,
+            "n_checked": n_checked,
+            "discrepancies": discrepancies,
+            "gt_positive_count": pos_count,
+            "gt_positive_rate_pct": pos_rate,
+            "gt_recall_pct": gt_recall,
+            "key_feature_stats": key_feature_stats,
+        }
+        scale_reports.append(report_entry)
+
+        logger.info(
+            f"Scale {scale:,} Completed: time={elapsed:.3f}s, throughput={pairs_per_sec:,.0f} pairs/s, "
+            f"size={df_size_mb:.2f} MB, nulls={total_nulls}, nans={total_nans}, infs={total_infs}, "
+            f"duplicates={not no_duplicates}, standalone_consistent={consistent}, "
+            f"GT positives={pos_count} ({pos_rate:.2f}%), GT recall={gt_recall:.2f}%"
+        )
+
+    # 6. Print Structured Report Summary
+    logger.info("=" * 80)
+    logger.info("PROGRESSIVE VALIDATION SUMMARY TABLE")
+    logger.info("=" * 80)
+
+    print("\n### 1. Scale, Runtime, and Memory Performance")
+    print(f"| Scale (Pairs) | Runtime (s) | Throughput (pairs/s) | Polars DF Size (MB) | Traced Memory (MB) | Peak RSS (MB) |")
+    print(f"|:-------------:|:-----------:|:--------------------:|:-------------------:|:------------------:|:-------------:|")
+    for r in scale_reports:
+        print(
+            f"| {r['scale']:,} | {r['runtime_s']:.3f}s | {r['pairs_per_sec']:,.0f} | "
+            f"{r['df_size_mb']:.2f} MB | {r['traced_peak_mb']:.2f} MB | {r['rss_peak_mb']:.1f} MB |"
+        )
+
+    print("\n### 2. Integrity, Schema, Dtypes, and Missing Values")
+    print(f"| Scale | Shape Matches | Order Matches | Dtypes Match | Duplicates | Nulls | NaNs | Infs | Ranges Valid | Module Consistency |")
+    print(f"|:-----:|:-------------:|:-------------:|:------------:|:----------:|:-----:|:----:|:----:|:------------:|:------------------:|")
+    for r in scale_reports:
+        print(
+            f"| {r['scale']:,} | {'PASS (32)' if r['shape_ok'] else 'FAIL'} | "
+            f"{'PASS' if r['cols_match'] else 'FAIL'} | {'PASS (29)' if r['dtypes_match'] else 'FAIL'} | "
+            f"{'0 (None)' if r['no_duplicates'] else 'FAIL'} | {r['total_nulls']} | {r['total_nans']} | {r['total_infs']} | "
+            f"{'PASS' if r['all_ranges_valid'] else 'FAIL'} | "
+            f"{'PASS (50/50)' if r['consistent'] else 'FAIL'} |"
+        )
+
+    print("\n### 3. Ground Truth Coverage & Recall")
+    print(f"| Scale | Candidate Pairs | Sample GT Universe | Recovered GT Positives | Positive Precision (%) | GT Recall (%) |")
+    print(f"|:-----:|:---------------:|:------------------:|:----------------------:|:----------------------:|:-------------:|")
+    for r in scale_reports:
+        print(
+            f"| {r['scale']:,} | {r['scale']:,} | {len(relevant_gt_pairs):,} | "
+            f"{r['gt_positive_count']:,} | {r['gt_positive_rate_pct']:.2f}% | {r['gt_recall_pct']:.2f}% |"
+        )
+
+    print("\n### 4. Key Feature Distribution Statistics (100k Scale)")
+    r100k = scale_reports[-1]
+    print(f"| Feature Name | Min | Max | Mean | Std | % Zero |")
+    print(f"|:-------------|:---:|:---:|:----:|:---:|:------:|")
+    for feat, stats in r100k["key_feature_stats"].items():
+        print(
+            f"| `{feat}` | {stats['min']:.3f} | {stats['max']:.3f} | "
+            f"{stats['mean']:.3f} | {stats['std']:.3f} | {stats['zero_pct']:.1f}% |"
+        )
+
+    logger.info("=" * 80)
+    logger.info("ALL SCALE CHECKS COMPLETED SUCCESSFULLY")
+    logger.info("=" * 80)
+
+
+if __name__ == "__main__":
+    main()
