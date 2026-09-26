@@ -1,3 +1,4 @@
+"""Feature engineering package for Business Entity Resolution."""
 """
 Features module for Business Entity Resolution.
 
