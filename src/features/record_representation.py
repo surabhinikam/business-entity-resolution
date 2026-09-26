@@ -297,9 +297,9 @@ def build_address_representation(
     """
     if isinstance(normalized_address, dict):
         rec = normalized_address
-        normalized_address = rec.get("business_address_normalized")
+        normalized_address = rec.get("clean_address", rec.get("normalized_address", rec.get("business_address_normalized")))
         if tokens is None:
-            tokens = rec.get("business_address_tokens")
+            tokens = rec.get("token_set", rec.get("address_tokens", rec.get("business_address_tokens")))
         if country is None:
             country = rec.get("country_normalized")
         if not entity_id:
@@ -307,40 +307,28 @@ def build_address_representation(
         if not source:
             source = rec.get("source", "")
 
+    _missing_kwargs: dict[str, Any] = dict(
+        clean_address="",
+        token_set=frozenset(),
+        char_3grams=frozenset(),
+        char_length=0,
+        token_count=0,
+        numeric_tokens=frozenset(),
+        primary_number=None,
+        postal_code=None,
+        is_missing=True,
+        ordered_tokens=(),
+        entity_id=entity_id,
+        source=source,
+        country_normalized=country,
+    )
+
     if normalized_address is None:
-        return AddressRepresentation(
-            clean_address="",
-            token_set=frozenset(),
-            char_3grams=frozenset(),
-            char_length=0,
-            token_count=0,
-            numeric_tokens=frozenset(),
-            primary_number=None,
-            postal_code=None,
-            is_missing=True,
-            ordered_tokens=(),
-            entity_id=entity_id,
-            source=source,
-            country_normalized=country,
-        )
+        return AddressRepresentation(**_missing_kwargs)
 
     s = str(normalized_address).strip()
     if not s or s.lower() in _SENTINEL_EMPTY_STRINGS:
-        return AddressRepresentation(
-            clean_address="",
-            token_set=frozenset(),
-            char_3grams=frozenset(),
-            char_length=0,
-            token_count=0,
-            numeric_tokens=frozenset(),
-            primary_number=None,
-            postal_code=None,
-            is_missing=True,
-            ordered_tokens=(),
-            entity_id=entity_id,
-            source=source,
-            country_normalized=country,
-        )
+        return AddressRepresentation(**_missing_kwargs)
 
     clean_address = s.lower()
 

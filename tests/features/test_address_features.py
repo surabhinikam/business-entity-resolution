@@ -424,3 +424,98 @@ class TestBatchEdgeCasesAndValidation:
         res = extract_address_features_batch(empty_pairs, {}, {})
         assert res.height == 0
         assert res.columns == PAIR_ID_COLUMNS + ADDRESS_FEATURE_NAMES
+
+    def test_missing_pair_id_column_raises(self):
+        """Missing PAIR_ID_COLUMNS in input raises ValueError."""
+        bad_df = pl.DataFrame({"source1_entity_id": ["S1-1"]})
+        with pytest.raises(ValueError, match="candidate_entity_id"):
+            extract_address_features_batch(bad_df, {}, {})
+
+
+class TestAddressRepresentationBuilder:
+    """Unit tests for build_address_representation and extract_postal_code helpers."""
+
+    def test_none_input_is_missing(self):
+        rep = build_address_representation(None)
+        assert rep.is_missing
+        assert rep.clean_address == ""
+        assert rep.token_set == frozenset()
+        assert rep.primary_number is None
+        assert rep.postal_code is None
+
+    def test_empty_string_is_missing(self):
+        rep = build_address_representation("")
+        assert rep.is_missing
+
+    def test_sentinel_strings_are_missing(self):
+        for s in ("none", "nan", "null", "None", "NaN"):
+            rep = build_address_representation(s)
+            assert rep.is_missing, f"Expected '{s}' to be treated as missing"
+
+    def test_normal_address_fields(self):
+        rep = build_address_representation("108 main street", country="united states")
+        assert not rep.is_missing
+        assert rep.clean_address == "108 main street"
+        assert rep.char_length == 15
+        assert "main" in rep.token_set
+        assert "108" in rep.token_set
+        assert rep.primary_number == "108"
+        assert len(rep.char_3grams) > 0
+
+    def test_dict_record_input(self):
+        record = {
+            "business_address_normalized": "570 mg road bangalore",
+            "business_address_tokens": ["570", "mg", "road", "bangalore"],
+            "country_normalized": "india",
+            "entity_id": "E1",
+            "source": "source2",
+        }
+        rep = build_address_representation(record)
+        assert not rep.is_missing
+        assert rep.clean_address == "570 mg road bangalore"
+        assert rep.entity_id == "E1"
+        assert rep.source == "source2"
+        assert rep.country_normalized == "india"
+        assert "570" in rep.token_set
+
+    def test_immutability(self):
+        from dataclasses import FrozenInstanceError
+        rep = build_address_representation("108 main st")
+        with pytest.raises(FrozenInstanceError):
+            rep.clean_address = "other"  # type: ignore
+
+    def test_determinism(self):
+        rep1 = build_address_representation("108 main st pa 16801", country="united states")
+        rep2 = build_address_representation("108 main st pa 16801", country="united states")
+        assert rep1 == rep2
+        assert rep1.postal_code == rep2.postal_code
+        assert rep1.primary_number == rep2.primary_number
+
+    def test_extract_postal_code_india(self):
+        assert extract_postal_code("108 lake town 700089", country="india") == "700089"
+        assert extract_postal_code("700089", country="india") == "700089"
+        assert extract_postal_code("mg road bangalore", country="india") is None
+
+    def test_extract_postal_code_us(self):
+        assert extract_postal_code("108 main st pa 16801", country="united states") == "16801"
+        assert extract_postal_code("friendship ln conroe tx 77301", country="united states") == "77301"
+
+    def test_extract_postal_code_missing(self):
+        assert extract_postal_code(None) is None
+        assert extract_postal_code("") is None
+        assert extract_postal_code("suite b oak plaza") is None
+
+    def test_backwards_compat_properties(self):
+        rep = build_address_representation("108 main street", country="united states")
+        assert rep.is_address_missing == rep.is_missing
+        assert rep.normalized_address == rep.clean_address
+        assert rep.primary_address_number == rep.primary_number
+        assert set(rep.all_numeric_tokens) == set(rep.numeric_tokens)
+        assert isinstance(rep.address_tokens, list)
+
+    def test_compute_address_pair_features_alias(self):
+        """compute_address_pair_features is a stable alias for compute_address_features."""
+        rep = build_address_representation("108 main st")
+        f1 = compute_address_features(rep, rep)
+        f2 = compute_address_pair_features(rep, rep)
+        assert f1 == f2
