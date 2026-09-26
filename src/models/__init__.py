@@ -36,6 +36,23 @@ from src.models.cross_validation import (
     create_entity_disjoint_kfold_splits,
     run_cv_experiment,
 )
+from src.models.validation_analysis import (
+    categorize_error_patterns,
+    categorize_false_negative,
+    categorize_false_positive,
+    compute_entity_level_analysis,
+    compute_score_distributions,
+    compute_subgroup_metrics,
+    sweep_threshold_metrics,
+)
+from src.models.model_family_comparison import (
+    ErrorOverlapSummary,
+    ModelFamilyResult,
+    ModelFoldMetrics,
+    build_model_for_family,
+    compute_model_family_error_overlap,
+    run_model_family_cv,
+)
 
 __all__ = [
     "compute_f_beta",
@@ -62,5 +79,18 @@ __all__ = [
     "EntityDisjointKFoldSplit",
     "create_entity_disjoint_kfold_splits",
     "run_cv_experiment",
+    "categorize_error_patterns",
+    "categorize_false_negative",
+    "categorize_false_positive",
+    "compute_entity_level_analysis",
+    "compute_score_distributions",
+    "compute_subgroup_metrics",
+    "sweep_threshold_metrics",
+    "ErrorOverlapSummary",
+    "ModelFamilyResult",
+    "ModelFoldMetrics",
+    "build_model_for_family",
+    "compute_model_family_error_overlap",
+    "run_model_family_cv",
 ]
 

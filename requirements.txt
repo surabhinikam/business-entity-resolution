@@ -12,6 +12,8 @@ indic-transliteration
 # Machine Learning & Evaluation
 scikit-learn
 lightgbm
+xgboost
+catboost
 scipy
 
 # Utilities & Configuration
