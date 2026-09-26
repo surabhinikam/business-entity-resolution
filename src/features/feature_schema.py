@@ -274,6 +274,13 @@ FULL_FEATURE_SCHEMA: Dict[str, pl.DataType] = {
 # Single source of truth alias
 FEATURE_SCHEMA: Dict[str, pl.DataType] = FULL_FEATURE_SCHEMA
 
+# Supervised training dataset column and schema constants
+LABEL_COLUMN: str = "label"
+LABEL_DTYPE: pl.DataType = pl.Int8
+SUPERVISED_DATASET_COLUMNS: List[str] = FULL_PIPELINE_COLUMNS + [LABEL_COLUMN]
+SUPERVISED_FEATURE_SCHEMA: Dict[str, pl.DataType] = {**FULL_FEATURE_SCHEMA, LABEL_COLUMN: LABEL_DTYPE}
+SUPERVISED_SCHEMA: Dict[str, pl.DataType] = SUPERVISED_FEATURE_SCHEMA
+
 
 # =============================================================================
 # 4. Feature Metadata & Documentation

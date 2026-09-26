@@ -65,6 +65,22 @@ from src.features.feature_pipeline import (
     Person2FeaturePipeline,
     combine_person1_and_person2_features,
 )
+from src.features.training_dataset import (
+    DatasetSplitStats,
+    SupervisedDatasetSplit,
+    normalize_ground_truth,
+    label_candidate_pairs,
+    compute_split_stats,
+    split_supervised_dataset,
+    SupervisedDatasetBuilder,
+)
+from src.features.feature_schema import (
+    LABEL_COLUMN,
+    LABEL_DTYPE,
+    SUPERVISED_DATASET_COLUMNS,
+    SUPERVISED_FEATURE_SCHEMA,
+    SUPERVISED_SCHEMA,
+)
 
 __all__ = [
     "PAIR_ID_COLUMNS",
@@ -83,6 +99,11 @@ __all__ = [
     "FULL_FEATURE_SCHEMA",
     "FEATURE_SCHEMA",
     "FEATURE_METADATA",
+    "LABEL_COLUMN",
+    "LABEL_DTYPE",
+    "SUPERVISED_DATASET_COLUMNS",
+    "SUPERVISED_FEATURE_SCHEMA",
+    "SUPERVISED_SCHEMA",
     "NameRepresentation",
     "EMPTY_NAME_REPRESENTATION",
     "build_name_representation",
@@ -108,5 +129,12 @@ __all__ = [
     "EntityResolutionFeaturePipeline",
     "Person2FeaturePipeline",
     "combine_person1_and_person2_features",
+    "DatasetSplitStats",
+    "SupervisedDatasetSplit",
+    "normalize_ground_truth",
+    "label_candidate_pairs",
+    "compute_split_stats",
+    "split_supervised_dataset",
+    "SupervisedDatasetBuilder",
 ]
 
