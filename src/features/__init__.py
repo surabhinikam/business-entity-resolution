@@ -1,12 +1,13 @@
-"""Feature engineering package for Business Entity Resolution."""
 """
 Features module for Business Entity Resolution.
 
-Scope (Person 2):
-- Address pair features
-- Cross-field features
-- Blocking provenance features
-- Scaffolding and pipeline integration
+Scope:
+- Record-level representations (Name & Address)
+- Business name pair features (Person 1)
+- Address pair features (Person 2)
+- Cross-field features (Person 2)
+- Blocking provenance features (Person 2)
+- Feature integration pipeline
 """
 
 from src.features.feature_schema import (
@@ -21,8 +22,22 @@ from src.features.feature_schema import (
     PERSON2_FEATURE_SCHEMA,
     FEATURE_METADATA,
 )
-from src.features.address_features import (
+from src.features.record_representation import (
+    NameRepresentation,
+    EMPTY_NAME_REPRESENTATION,
+    build_name_representation,
+    AddressRepresentation,
+    EMPTY_ADDRESS_REPRESENTATION,
     build_address_representation,
+    extract_postal_code,
+)
+from src.features.name_features import (
+    compute_name_features,
+    extract_legal_suffix,
+    CANONICAL_LEGAL_SUFFIXES,
+)
+from src.features.address_features import (
+    compute_address_features,
     compute_address_pair_features,
     extract_address_features_batch,
 )
@@ -51,7 +66,17 @@ __all__ = [
     "PERSON2_FEATURE_NAMES",
     "PERSON2_FEATURE_SCHEMA",
     "FEATURE_METADATA",
+    "NameRepresentation",
+    "EMPTY_NAME_REPRESENTATION",
+    "build_name_representation",
+    "AddressRepresentation",
+    "EMPTY_ADDRESS_REPRESENTATION",
     "build_address_representation",
+    "extract_postal_code",
+    "compute_name_features",
+    "extract_legal_suffix",
+    "CANONICAL_LEGAL_SUFFIXES",
+    "compute_address_features",
     "compute_address_pair_features",
     "extract_address_features_batch",
     "compute_cross_features",

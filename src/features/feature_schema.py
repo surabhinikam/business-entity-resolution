@@ -36,6 +36,14 @@ CandidatePairId = Tuple[str, str, str]
 # 2. Record-Level Representations (Consumed from Preprocessing / Person 1)
 # =============================================================================
 
+from src.features.record_representation import (
+    AddressRepresentation,
+    EMPTY_ADDRESS_REPRESENTATION,
+    build_address_representation,
+    extract_postal_code,
+)
+
+
 @dataclass
 class AddressRecordRepresentation:
     """
@@ -54,6 +62,47 @@ class AddressRecordRepresentation:
     all_numeric_tokens: Set[str] = field(default_factory=set)
     postal_code: Optional[str] = None
     is_address_missing: bool = False
+
+    # AddressRepresentation compatibility properties
+    @property
+    def clean_address(self) -> str:
+        return (self.normalized_address or "").strip().lower()
+
+    @property
+    def is_missing(self) -> bool:
+        return self.is_address_missing or not bool(self.clean_address)
+
+    @property
+    def token_set(self) -> frozenset[str]:
+        if self.address_tokens:
+            return frozenset(t.strip().lower() for t in self.address_tokens if t and str(t).strip())
+        return frozenset(self.clean_address.split()) if self.clean_address else frozenset()
+
+    @property
+    def char_length(self) -> int:
+        return len(self.clean_address)
+
+    @property
+    def token_count(self) -> int:
+        return len(self.token_set)
+
+    @property
+    def primary_number(self) -> Optional[str]:
+        return self.primary_address_number
+
+    @property
+    def numeric_tokens(self) -> frozenset[str]:
+        if self.all_numeric_tokens:
+            return frozenset(self.all_numeric_tokens)
+        from src.analysis.text_similarity import extract_numeric_tokens
+        return frozenset(extract_numeric_tokens(self.clean_address))
+
+    @property
+    def char_3grams(self) -> frozenset[str]:
+        if not self.clean_address:
+            return frozenset()
+        from src.analysis.text_similarity import character_ngrams
+        return frozenset(character_ngrams(self.clean_address, n=3))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
