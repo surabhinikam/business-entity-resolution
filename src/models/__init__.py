@@ -29,6 +29,13 @@ from src.models.phase4_interactions import (
     EXP_ALL_FEATURES,
     compute_interaction_features,
 )
+from src.models.cross_validation import (
+    CVFoldMetrics,
+    CVResult,
+    EntityDisjointKFoldSplit,
+    create_entity_disjoint_kfold_splits,
+    run_cv_experiment,
+)
 
 __all__ = [
     "compute_f_beta",
@@ -50,5 +57,10 @@ __all__ = [
     "EXP_C_FEATURES",
     "EXP_ALL_FEATURES",
     "compute_interaction_features",
+    "CVFoldMetrics",
+    "CVResult",
+    "EntityDisjointKFoldSplit",
+    "create_entity_disjoint_kfold_splits",
+    "run_cv_experiment",
 ]
 
