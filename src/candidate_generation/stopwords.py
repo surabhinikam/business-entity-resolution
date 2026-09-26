@@ -75,7 +75,7 @@ GENERIC_BUSINESS_TOKENS: FrozenSet[str] = frozenset({
 # 3. Honorifics and organizational prefixes
 # =============================================================================
 HONORIFIC_TOKENS: FrozenSet[str] = frozenset({
-    "mr", "mrs", "ms", "dr", "prof", "sir", "smt",
+    "mr", "mrs", "ms", "m/s", "m-s", "messrs", "dr", "prof", "sir", "smt",
     "shri", "sri", "shree", "sree", "kumari",
     "late", "son", "sons", "brothers", "bros",
 })
