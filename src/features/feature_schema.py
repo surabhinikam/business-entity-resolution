@@ -142,6 +142,37 @@ class BlockingRecordRepresentation:
 # 3. Feature Definitions & Schema
 # =============================================================================
 
+# Business name features (Person 1)
+NAME_FEATURE_NAMES: List[str] = [
+    "name_exact_norm",
+    "name_exact_translit",
+    "name_token_jaccard",
+    "name_token_overlap",
+    "name_token_dice",
+    "name_token_count_diff",
+    "name_char_3gram_jaccard",
+    "name_char_len_diff",
+    "name_char_len_ratio",
+    "name_first_token_exact",
+    "name_acronym_match",
+    "name_legal_suffix_match",
+]
+
+NAME_FEATURE_SCHEMA: Dict[str, pl.DataType] = {
+    "name_exact_norm": pl.Int8,
+    "name_exact_translit": pl.Int8,
+    "name_token_jaccard": pl.Float32,
+    "name_token_overlap": pl.Float32,
+    "name_token_dice": pl.Float32,
+    "name_token_count_diff": pl.Int16,
+    "name_char_3gram_jaccard": pl.Float32,
+    "name_char_len_diff": pl.Int16,
+    "name_char_len_ratio": pl.Float32,
+    "name_first_token_exact": pl.Int8,
+    "name_acronym_match": pl.Int8,
+    "name_legal_suffix_match": pl.Int8,
+}
+
 # Feature names grouped by responsibility
 ADDRESS_FEATURE_NAMES: List[str] = [
     "address_exact",
@@ -174,6 +205,14 @@ PERSON2_FEATURE_NAMES: List[str] = (
     ADDRESS_FEATURE_NAMES + CROSS_FEATURE_NAMES + BLOCKING_FEATURE_NAMES
 )
 
+# Combined list of ALL features across all four feature groups (Deterministic ordering)
+ALL_FEATURE_NAMES: List[str] = (
+    NAME_FEATURE_NAMES + ADDRESS_FEATURE_NAMES + CROSS_FEATURE_NAMES + BLOCKING_FEATURE_NAMES
+)
+
+# Canonical complete column ordering for full feature pipeline output
+FULL_PIPELINE_COLUMNS: List[str] = PAIR_ID_COLUMNS + ALL_FEATURE_NAMES
+
 # Polars data types schema for Person 2 feature columns
 PERSON2_FEATURE_SCHEMA: Dict[str, pl.DataType] = {
     # Identity columns
@@ -202,12 +241,119 @@ PERSON2_FEATURE_SCHEMA: Dict[str, pl.DataType] = {
     "matched_key_count": pl.Int8,                   # sum of matched keys (1 to 5)
 }
 
+# Polars data types schema for ALL features across the entire pipeline
+FULL_FEATURE_SCHEMA: Dict[str, pl.DataType] = {
+    # Identity columns
+    "source1_entity_id": pl.Utf8,
+    "candidate_entity_id": pl.Utf8,
+    "candidate_source": pl.Utf8,
+    # Name features (Person 1)
+    **NAME_FEATURE_SCHEMA,
+    # Address features (Person 2)
+    "address_exact": pl.Int8,
+    "address_token_jaccard": pl.Float32,
+    "address_token_overlap": pl.Float32,
+    "address_char_3gram_similarity": pl.Float32,
+    "shared_address_number_count": pl.Int16,
+    "address_number_overlap": pl.Int8,
+    "postal_match": pl.Int8,
+    "address_length_difference": pl.Int16,
+    "address_missing_s1": pl.Int8,
+    "address_missing_candidate": pl.Int8,
+    # Cross-field features (Person 2)
+    "country_match": pl.Int8,
+    # Blocking provenance features (Person 2)
+    "matched_key_A": pl.Int8,
+    "matched_key_C": pl.Int8,
+    "matched_key_D": pl.Int8,
+    "matched_key_E": pl.Int8,
+    "matched_key_F": pl.Int8,
+    "matched_key_count": pl.Int8,
+}
+
+# Single source of truth alias
+FEATURE_SCHEMA: Dict[str, pl.DataType] = FULL_FEATURE_SCHEMA
+
 
 # =============================================================================
 # 4. Feature Metadata & Documentation
 # =============================================================================
 
 FEATURE_METADATA: Dict[str, Dict[str, Any]] = {
+    # Name features
+    "name_exact_norm": {
+        "type": "binary_flag",
+        "values": [0, 1],
+        "description": "Exact equality of normalized business name strings.",
+        "dependencies": ["business_name_normalized"],
+    },
+    "name_exact_translit": {
+        "type": "binary_flag",
+        "values": [0, 1],
+        "description": "Exact equality of transliterated business name strings.",
+        "dependencies": ["business_name_transliterated"],
+    },
+    "name_token_jaccard": {
+        "type": "numeric_similarity",
+        "values": [0.0, 1.0],
+        "description": "Jaccard similarity between business name token sets.",
+        "dependencies": ["business_name_tokens"],
+    },
+    "name_token_overlap": {
+        "type": "numeric_similarity",
+        "values": [0.0, 1.0],
+        "description": "Szymkiewicz-Simpson overlap coefficient on business name tokens.",
+        "dependencies": ["business_name_tokens"],
+    },
+    "name_token_dice": {
+        "type": "numeric_similarity",
+        "values": [0.0, 1.0],
+        "description": "Dice-Sorensen coefficient on business name tokens.",
+        "dependencies": ["business_name_tokens"],
+    },
+    "name_token_count_diff": {
+        "type": "count_difference",
+        "values": [0, None],
+        "description": "Absolute difference in token count between business names.",
+        "dependencies": ["business_name_tokens"],
+    },
+    "name_char_3gram_jaccard": {
+        "type": "numeric_similarity",
+        "values": [0.0, 1.0],
+        "description": "Character 3-gram Jaccard similarity of normalized business names.",
+        "dependencies": ["business_name_normalized"],
+    },
+    "name_char_len_diff": {
+        "type": "numeric_difference",
+        "values": [0, None],
+        "description": "Absolute character length difference between normalized business names.",
+        "dependencies": ["business_name_normalized"],
+    },
+    "name_char_len_ratio": {
+        "type": "numeric_similarity",
+        "values": [0.0, 1.0],
+        "description": "Ratio of shorter to longer character length (min_len / max_len).",
+        "dependencies": ["business_name_normalized"],
+    },
+    "name_first_token_exact": {
+        "type": "binary_flag",
+        "values": [0, 1],
+        "description": "Exact match between first tokens of normalized business names.",
+        "dependencies": ["business_name_normalized"],
+    },
+    "name_acronym_match": {
+        "type": "binary_flag",
+        "values": [0, 1],
+        "description": "Exact match between deterministic acronyms/initialisms.",
+        "dependencies": ["business_name_tokens"],
+    },
+    "name_legal_suffix_match": {
+        "type": "binary_flag",
+        "values": [0, 1],
+        "description": "Exact match between extracted canonical corporate/legal suffixes.",
+        "dependencies": ["business_name_normalized", "extract_legal_suffix"],
+    },
+    # Address features
     "address_exact": {
         "type": "categorical_flag",
         "values": [-1, 0, 1],

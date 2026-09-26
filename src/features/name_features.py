@@ -8,13 +8,20 @@ without re-tokenizing or re-extracting character n-grams.
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
+import polars as pl
 
 from src.features.record_representation import NameRepresentation
+from src.features.feature_schema import (
+    PAIR_ID_COLUMNS,
+    NAME_FEATURE_NAMES,
+    NAME_FEATURE_SCHEMA,
+)
 from src.analysis.text_similarity import (
     jaccard_similarity,
     overlap_coefficient,
     dice_coefficient,
+    character_ngrams,
 )
 from src.normalization.business_vocabulary import LEGAL_SUFFIX_RULES
 
@@ -159,3 +166,222 @@ def compute_name_features(
         "name_acronym_match": name_acronym_match,
         "name_legal_suffix_match": name_legal_suffix_match,
     }
+
+
+def _name_representations_to_lookup_df(
+    reps: Union[Dict[str, Any], pl.DataFrame],
+    translits: Optional[Union[Dict[str, Optional[str]], pl.DataFrame]] = None,
+) -> pl.DataFrame:
+    """Converts a dictionary or DataFrame of name representations into a standardized lookup DataFrame."""
+    if isinstance(reps, pl.DataFrame):
+        return reps
+
+    # Build transliteration lookup if provided
+    t_lookup: Dict[str, Optional[str]] = {}
+    if translits is not None:
+        if isinstance(translits, dict):
+            t_lookup = translits
+        elif isinstance(translits, pl.DataFrame) and "entity_id" in translits.columns and "translit" in translits.columns:
+            t_lookup = dict(zip(translits["entity_id"].to_list(), translits["translit"].to_list()))
+
+    rows: List[Dict[str, Any]] = []
+    for eid, r in reps.items():
+        if isinstance(r, dict):
+            clean_name = (r.get("clean_name") or r.get("business_name_normalized") or "").strip().lower()
+            toks = r.get("token_set") or r.get("business_name_tokens") or clean_name.split()
+            if isinstance(toks, (set, frozenset)):
+                toks = list(toks)
+            grams = r.get("char_3grams")
+            if grams is None:
+                grams = character_ngrams(clean_name, n=3) if clean_name else []
+            elif isinstance(grams, (set, frozenset)):
+                grams = list(grams)
+            char_len = int(r.get("char_length", len(clean_name)))
+            tok_count = int(r.get("token_count", len(toks)))
+            acronym = r.get("acronym") or ("".join(t[0] for t in toks if t) if toks else None)
+            first_tok = clean_name.split()[0] if clean_name else None
+            legal = extract_legal_suffix(clean_name)
+            raw_t = t_lookup.get(eid, r.get("translit", r.get("business_name_transliterated")))
+        else:
+            clean_name = getattr(r, "clean_name", "") or ""
+            tok_set = getattr(r, "token_set", None)
+            toks = list(tok_set) if tok_set is not None else []
+            grams = list(getattr(r, "char_3grams", []))
+            char_len = int(getattr(r, "char_length", len(clean_name)))
+            tok_count = int(getattr(r, "token_count", len(toks)))
+            acronym = getattr(r, "acronym", None) or None
+            first_tok = clean_name.split()[0] if clean_name else None
+            legal = extract_legal_suffix(clean_name)
+            raw_t = t_lookup.get(eid, getattr(r, "translit", None))
+
+        # Clean transliterated string
+        if raw_t is not None:
+            t_clean = str(raw_t).strip().lower()
+            if not t_clean or t_clean in _SENTINEL_EMPTY_STRINGS:
+                t_clean = None
+        else:
+            t_clean = None
+
+        rows.append({
+            "entity_id": str(eid),
+            "clean_name": clean_name,
+            "translit": t_clean,
+            "token_set": [str(t) for t in toks],
+            "char_3grams": [str(g) for g in grams],
+            "char_len": char_len,
+            "token_count": tok_count,
+            "first_token": first_tok,
+            "acronym": acronym,
+            "legal_suffix": legal,
+        })
+
+    lookup_schema = {
+        "entity_id": pl.Utf8,
+        "clean_name": pl.Utf8,
+        "translit": pl.Utf8,
+        "token_set": pl.List(pl.Utf8),
+        "char_3grams": pl.List(pl.Utf8),
+        "char_len": pl.Int64,
+        "token_count": pl.Int64,
+        "first_token": pl.Utf8,
+        "acronym": pl.Utf8,
+        "legal_suffix": pl.Utf8,
+    }
+
+    if not rows:
+        return pl.DataFrame({
+            "entity_id": pl.Series([], dtype=pl.Utf8),
+            "clean_name": pl.Series([], dtype=pl.Utf8),
+            "translit": pl.Series([], dtype=pl.Utf8),
+            "token_set": pl.Series([], dtype=pl.List(pl.Utf8)),
+            "char_3grams": pl.Series([], dtype=pl.List(pl.Utf8)),
+            "char_len": pl.Series([], dtype=pl.Int64),
+            "token_count": pl.Series([], dtype=pl.Int64),
+            "first_token": pl.Series([], dtype=pl.Utf8),
+            "acronym": pl.Series([], dtype=pl.Utf8),
+            "legal_suffix": pl.Series([], dtype=pl.Utf8),
+        }, schema=lookup_schema)
+
+    return pl.DataFrame(rows, schema=lookup_schema)
+
+
+def extract_name_features_batch(
+    candidate_pairs_df: pl.DataFrame,
+    s1_representations: Union[Dict[str, Any], pl.DataFrame],
+    cand_representations: Union[Dict[str, Any], pl.DataFrame],
+    s1_translit: Optional[Union[Dict[str, Optional[str]], pl.DataFrame]] = None,
+    cand_translit: Optional[Union[Dict[str, Optional[str]], pl.DataFrame]] = None,
+) -> pl.DataFrame:
+    """
+    Vectorized batch calculation of all 12 pairwise business name features.
+
+    Avoids row-by-row Python iteration over candidate pairs by joining lookup
+    tables and evaluating SIMD-accelerated Polars expressions.
+
+    Parameters:
+        candidate_pairs_df: DataFrame containing PAIR_ID_COLUMNS.
+        s1_representations: Mapping of S1 entity_id -> NameRepresentation (or lookup DataFrame).
+        cand_representations: Mapping of Candidate entity_id -> NameRepresentation (or lookup DataFrame).
+        s1_translit: Optional mapping or DataFrame of S1 entity_id -> transliterated string.
+        cand_translit: Optional mapping or DataFrame of Cand entity_id -> transliterated string.
+
+    Returns:
+        Polars DataFrame containing PAIR_ID_COLUMNS + NAME_FEATURE_NAMES.
+    """
+    for col in PAIR_ID_COLUMNS:
+        if col not in candidate_pairs_df.columns:
+            raise ValueError(f"Required identity column '{col}' missing from candidate_pairs_df")
+
+    if candidate_pairs_df.height == 0:
+        schema = {col: pl.Utf8 for col in PAIR_ID_COLUMNS}
+        schema.update(NAME_FEATURE_SCHEMA)
+        return pl.DataFrame(schema=schema)
+
+    s1_lookup = _name_representations_to_lookup_df(s1_representations, s1_translit)
+    cand_lookup = _name_representations_to_lookup_df(cand_representations, cand_translit)
+
+    joined = (
+        candidate_pairs_df.select(PAIR_ID_COLUMNS)
+        .join(s1_lookup, left_on="source1_entity_id", right_on="entity_id", how="left")
+        .join(cand_lookup, left_on="candidate_entity_id", right_on="entity_id", how="left", suffix="_cand")
+        .with_columns([
+            pl.col("token_set").fill_null([]),
+            pl.col("token_set_cand").fill_null([]),
+            pl.col("char_3grams").fill_null([]),
+            pl.col("char_3grams_cand").fill_null([]),
+        ])
+    )
+
+    token_inter = pl.col("token_set").list.set_intersection(pl.col("token_set_cand")).list.len()
+    token_union = pl.col("token_set").list.set_union(pl.col("token_set_cand")).list.len()
+    token_len_a = pl.col("token_set").list.len()
+    token_len_b = pl.col("token_set_cand").list.len()
+    token_min = pl.min_horizontal(token_len_a, token_len_b)
+
+    char_inter = pl.col("char_3grams").list.set_intersection(pl.col("char_3grams_cand")).list.len()
+    char_union = pl.col("char_3grams").list.set_union(pl.col("char_3grams_cand")).list.len()
+
+    char_len_a = pl.col("char_len").fill_null(0)
+    char_len_b = pl.col("char_len_cand").fill_null(0)
+    char_min = pl.min_horizontal(char_len_a, char_len_b)
+    char_max = pl.max_horizontal(char_len_a, char_len_b)
+
+    exprs = [
+        pl.when(
+            pl.col("clean_name").is_not_null()
+            & (pl.col("clean_name") != "")
+            & (pl.col("clean_name") == pl.col("clean_name_cand"))
+        )
+        .then(1).otherwise(0).cast(pl.Int8).alias("name_exact_norm"),
+
+        pl.when(
+            pl.col("translit").is_not_null()
+            & pl.col("translit_cand").is_not_null()
+            & (pl.col("translit") != "")
+            & (pl.col("translit_cand") != "")
+            & (pl.col("translit") == pl.col("translit_cand"))
+        )
+        .then(1).otherwise(0).cast(pl.Int8).alias("name_exact_translit"),
+
+        pl.when((token_union == 0) | token_union.is_null()).then(0.0)
+        .otherwise(token_inter / token_union).cast(pl.Float32).alias("name_token_jaccard"),
+
+        pl.when((token_min == 0) | token_min.is_null()).then(0.0)
+        .otherwise(token_inter / token_min).cast(pl.Float32).alias("name_token_overlap"),
+
+        pl.when((token_len_a + token_len_b == 0) | (token_len_a + token_len_b).is_null()).then(0.0)
+        .otherwise((2.0 * token_inter) / (token_len_a + token_len_b)).cast(pl.Float32).alias("name_token_dice"),
+
+        (pl.col("token_count").fill_null(0) - pl.col("token_count_cand").fill_null(0)).abs().cast(pl.Int16).alias("name_token_count_diff"),
+
+        pl.when((char_union == 0) | char_union.is_null()).then(0.0)
+        .otherwise(char_inter / char_union).cast(pl.Float32).alias("name_char_3gram_jaccard"),
+
+        (char_len_a - char_len_b).abs().cast(pl.Int16).alias("name_char_len_diff"),
+
+        pl.when((char_max == 0) | char_max.is_null()).then(0.0)
+        .otherwise(char_min / char_max).cast(pl.Float32).alias("name_char_len_ratio"),
+
+        pl.when(
+            pl.col("first_token").is_not_null()
+            & (pl.col("first_token") != "")
+            & (pl.col("first_token") == pl.col("first_token_cand"))
+        )
+        .then(1).otherwise(0).cast(pl.Int8).alias("name_first_token_exact"),
+
+        pl.when(
+            pl.col("acronym").is_not_null()
+            & (pl.col("acronym") != "")
+            & (pl.col("acronym") == pl.col("acronym_cand"))
+        )
+        .then(1).otherwise(0).cast(pl.Int8).alias("name_acronym_match"),
+
+        pl.when(
+            pl.col("legal_suffix").is_not_null()
+            & (pl.col("legal_suffix") != "")
+            & (pl.col("legal_suffix") == pl.col("legal_suffix_cand"))
+        )
+        .then(1).otherwise(0).cast(pl.Int8).alias("name_legal_suffix_match"),
+    ]
+
+    return joined.select(PAIR_ID_COLUMNS + exprs)

@@ -15,11 +15,17 @@ from src.features.feature_schema import (
     CandidatePairId,
     AddressRecordRepresentation,
     BlockingRecordRepresentation,
+    NAME_FEATURE_NAMES,
+    NAME_FEATURE_SCHEMA,
     ADDRESS_FEATURE_NAMES,
     CROSS_FEATURE_NAMES,
     BLOCKING_FEATURE_NAMES,
     PERSON2_FEATURE_NAMES,
     PERSON2_FEATURE_SCHEMA,
+    ALL_FEATURE_NAMES,
+    FULL_PIPELINE_COLUMNS,
+    FULL_FEATURE_SCHEMA,
+    FEATURE_SCHEMA,
     FEATURE_METADATA,
 )
 from src.features.record_representation import (
@@ -33,6 +39,7 @@ from src.features.record_representation import (
 )
 from src.features.name_features import (
     compute_name_features,
+    extract_name_features_batch,
     extract_legal_suffix,
     CANONICAL_LEGAL_SUFFIXES,
 )
@@ -53,6 +60,8 @@ from src.features.blocking_features import (
     extract_blocking_features_from_keys,
 )
 from src.features.feature_pipeline import (
+    FeaturePipeline,
+    EntityResolutionFeaturePipeline,
     Person2FeaturePipeline,
     combine_person1_and_person2_features,
 )
@@ -62,11 +71,17 @@ __all__ = [
     "CandidatePairId",
     "AddressRecordRepresentation",
     "BlockingRecordRepresentation",
+    "NAME_FEATURE_NAMES",
+    "NAME_FEATURE_SCHEMA",
     "ADDRESS_FEATURE_NAMES",
     "CROSS_FEATURE_NAMES",
     "BLOCKING_FEATURE_NAMES",
     "PERSON2_FEATURE_NAMES",
     "PERSON2_FEATURE_SCHEMA",
+    "ALL_FEATURE_NAMES",
+    "FULL_PIPELINE_COLUMNS",
+    "FULL_FEATURE_SCHEMA",
+    "FEATURE_SCHEMA",
     "FEATURE_METADATA",
     "NameRepresentation",
     "EMPTY_NAME_REPRESENTATION",
@@ -76,6 +91,7 @@ __all__ = [
     "build_address_representation",
     "extract_postal_code",
     "compute_name_features",
+    "extract_name_features_batch",
     "extract_legal_suffix",
     "CANONICAL_LEGAL_SUFFIXES",
     "compute_address_features",
@@ -88,6 +104,9 @@ __all__ = [
     "extract_blocking_features_batch",
     "extract_blocking_features_from_provenance_dict",
     "extract_blocking_features_from_keys",
+    "FeaturePipeline",
+    "EntityResolutionFeaturePipeline",
     "Person2FeaturePipeline",
     "combine_person1_and_person2_features",
 ]
+
