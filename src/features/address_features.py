@@ -202,19 +202,23 @@ def _representations_to_lookup_df(
     rows: List[Dict[str, Any]] = []
     for eid, r in reps.items():
         if isinstance(r, dict):
-            clean_addr = r.get("clean_address", r.get("business_address_normalized", "")) or ""
+            clean_addr = r.get("clean_address", r.get("normalized_address", r.get("business_address_normalized", ""))) or ""
             is_miss = r.get("is_missing", r.get("is_address_missing", not bool(clean_addr)))
-            toks = r.get("token_set", r.get("business_address_tokens", []))
-            if isinstance(toks, (set, frozenset)):
+            toks = r.get("token_set", r.get("address_tokens", r.get("business_address_tokens", [])))
+            if hasattr(toks, "__iter__") and not isinstance(toks, (str, list)):
                 toks = list(toks)
             elif toks is None:
                 toks = []
             num_toks = r.get("numeric_tokens", r.get("all_numeric_tokens", []))
-            if isinstance(num_toks, (set, frozenset)):
+            if hasattr(num_toks, "__iter__") and not isinstance(num_toks, (str, list)):
                 num_toks = list(num_toks)
+            elif num_toks is None:
+                num_toks = []
             grams = r.get("char_3grams", [])
-            if isinstance(grams, (set, frozenset)):
+            if hasattr(grams, "__iter__") and not isinstance(grams, (str, list)):
                 grams = list(grams)
+            elif grams is None:
+                grams = []
             primary_num = r.get("primary_number", r.get("primary_address_number"))
             postal = r.get("postal_code")
             char_len = r.get("char_length", len(clean_addr))
