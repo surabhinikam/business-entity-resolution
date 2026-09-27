@@ -38,6 +38,26 @@ logger = logging.getLogger(__name__)
 # Excluded non-feature metadata columns
 NON_FEATURE_COLUMNS: Set[str] = set(PAIR_ID_COLUMNS) | {LABEL_COLUMN}
 
+# Frozen final LightGBM hyperparameters selected in Phase 4D
+FINAL_LIGHTGBM_CONFIG: Dict[str, Any] = {
+    "num_leaves": 31,
+    "min_child_samples": 100,
+    "learning_rate": 0.03,
+    "n_estimators": 300,
+    "max_depth": -1,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "random_state": 42,
+}
+
+
+def build_final_model(extra_params: Optional[Dict[str, Any]] = None) -> BaselineMatchingModel:
+    """Instantiates the frozen final LightGBM production model established in Phase 4D."""
+    params = dict(FINAL_LIGHTGBM_CONFIG)
+    if extra_params:
+        params.update(extra_params)
+    return BaselineMatchingModel(**params)
+
 
 class BaselineMatchingModel:
     """

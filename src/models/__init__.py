@@ -12,6 +12,8 @@ from src.models.metrics import (
 from src.models.baseline_model import (
     BaselineMatchingModel,
     NON_FEATURE_COLUMNS,
+    FINAL_LIGHTGBM_CONFIG,
+    build_final_model,
 )
 from src.models.post_processing import (
     ThresholdOptimizationResult,
@@ -74,6 +76,8 @@ __all__ = [
     "evaluate_matching_probabilities",
     "BaselineMatchingModel",
     "NON_FEATURE_COLUMNS",
+    "FINAL_LIGHTGBM_CONFIG",
+    "build_final_model",
     "ThresholdOptimizationResult",
     "optimize_threshold_oof",
     "MatchPostProcessor",
