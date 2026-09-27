@@ -53,6 +53,18 @@ from src.models.model_family_comparison import (
     compute_model_family_error_overlap,
     run_model_family_cv,
 )
+from src.models.ensemble import (
+    EnsembleDefinition,
+    EnsembleErrorExchange,
+    EnsembleFoldMetric,
+    EnsembleResult,
+    STANDARD_ENSEMBLES,
+    blend_rank_average,
+    blend_weighted_probabilities,
+    compute_ensemble_error_exchange,
+    evaluate_ensemble,
+    rank_transform,
+)
 
 __all__ = [
     "compute_f_beta",
@@ -92,5 +104,16 @@ __all__ = [
     "build_model_for_family",
     "compute_model_family_error_overlap",
     "run_model_family_cv",
+    "EnsembleDefinition",
+    "EnsembleErrorExchange",
+    "EnsembleFoldMetric",
+    "EnsembleResult",
+    "STANDARD_ENSEMBLES",
+    "blend_rank_average",
+    "blend_weighted_probabilities",
+    "compute_ensemble_error_exchange",
+    "evaluate_ensemble",
+    "rank_transform",
 ]
+
 
