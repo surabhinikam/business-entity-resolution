@@ -25,7 +25,7 @@ Usage:
         --input-root data/processed/test \\
         --model models/lgbm_baseline.txt \\
         --submission submission.csv \\
-        --threshold 0.5 \\
+        --threshold 0.88 \\
         [--limit-source1 N]  # bounded smoke-test only; do NOT use for final submission
 """
 
@@ -103,8 +103,8 @@ def main() -> None:
     parser.add_argument(
         "--threshold",
         type=float,
-        default=0.5,
-        help="Probability threshold for accepting a match (default: 0.5).",
+        default=0.88,
+        help="Probability threshold for accepting a match (default: 0.88, frozen Phase 7A decision threshold).",
     )
     parser.add_argument(
         "--limit-source1",
